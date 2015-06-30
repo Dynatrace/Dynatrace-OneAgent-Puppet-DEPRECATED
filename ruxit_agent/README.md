@@ -9,7 +9,6 @@ This module downloads and installs the [ruxit](http://www.ruxit.com/) unified ag
 class { 'ruxit_agent':
   user          => 'test',
   group         => 'test',
-  ruxit_host    => 'https://yxcvbnm.live.ruxit.com',
   ruxit_tenant  => 'yxcvbnm',
   ruxit_token   => 'TOKEN',
 }
@@ -46,7 +45,7 @@ The owner of files.
 The group for the owner of files.
 
 ####`ruxit_host`
-The ruxit server to connect to.
+The ruxit server to connect to. This defaults to the https://{tenant}.live.ruxit.com
 
 ####`ruxit_tenant`
 Your ruxit tenant ID.
