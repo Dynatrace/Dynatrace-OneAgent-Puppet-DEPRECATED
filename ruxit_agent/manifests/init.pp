@@ -8,9 +8,9 @@
 #   Parameters:
 #   * $user             => the owner of files
 #   * $group            => the group of the owner
-#   * $ruxit_server       => the ruxit server to connect to => defaults to https://{tenant}.live.ruxit.com
 #   * $ruxit_tenant     => your ruxit tenant
 #   * $ruxit_token      => the token for your tenant
+#   * $ruxit_server     => the ruxit server to connect to => defaults to https://{tenant}.live.ruxit.com
 #   * $version          => a defined version to install => defaults to latest
 #   * $channel          => define the channel you want to use => defaults to stable
 #   * $log_keep_days    => set the number of days you want to keep logs => defaults to 14
@@ -20,9 +20,9 @@
 class ruxit_agent (
   $user,
   $group,
-  $ruxit_server     = '',
   $ruxit_tenant,
   $ruxit_token,
+  $ruxit_server     = '',
   $version          = '',
   $channel          = 'stable',
   $log_keep_days    = '14',
