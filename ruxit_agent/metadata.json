@@ -18,8 +18,8 @@
 			"operatingsystem": "CentOS"
 		}
 	],
-  "project_page": "",
-  "source": "",
+  "project_page": "https://github.com/ruxit/puppet/tree/master/ruxit_agent",
+  "source": "https://github.com/ruxit/puppet/tree/master/ruxit_agent",
   "requirements": [],
   "summary": "This downloads and installs the ruxit agent",
   "tags": [ "install", "upgrade", "ruxit", "agent" ],
