@@ -44,7 +44,7 @@ The owner of files.
 ####`group`
 The group for the owner of files.
 
-####`ruxit_host`
+####`ruxit_server`
 The ruxit server to connect to. This defaults to the https://{tenant}.live.ruxit.com
 
 ####`ruxit_tenant`
