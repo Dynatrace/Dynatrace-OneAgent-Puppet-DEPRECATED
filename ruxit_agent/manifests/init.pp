@@ -8,7 +8,7 @@
 #   Parameters:
 #   * $user             => the owner of files
 #   * $group            => the group of the owner
-#   * $ruxit_host       => the ruxit server to connect to
+#   * $ruxit_host       => the ruxit server to connect to => defaults to https://{tenant}.live.ruxit.com
 #   * $ruxit_tenant     => your ruxit tenant
 #   * $ruxit_token      => the token for your tenant
 #   * $version          => a defined version to install => defaults to latest
@@ -20,7 +20,7 @@
 class ruxit_agent (
   $user,
   $group,
-  $ruxit_host,
+  $ruxit_host       = '',
   $ruxit_tenant,
   $ruxit_token,
   $version          = '',
@@ -28,6 +28,9 @@ class ruxit_agent (
   $log_keep_days    = '14',
   $service_restarts = []
   ) {
+  if $ruxit_host == '' {
+    $ruxit_host = "https://${ruxit_tenant}.live.ruxit.com"
+  }
   # os specific definitions
   if $::kernel =~ /Linux/ {
     $usr_home       = "/home/${user}"
