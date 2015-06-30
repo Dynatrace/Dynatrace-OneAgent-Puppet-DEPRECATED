@@ -1,17 +1,6 @@
 ## Overview
 
-This module downloads and installs [ruxit](http://www.ruxit.com/) agent on windows and linux systems.
-
-## Download Channels
-You can choose between the following channels for installation:
-
-- **dev** -> development branch (highly unstable)
-- **sprint** -> development branch (unstable)
-- **unstable** -> release branch (unstable)
-- **stable** -> release branch (stable)
-
-*For production deployments we highly recommend the stable branch which is the default for that module as well.*
-
+This module downloads and installs the [ruxit](http://www.ruxit.com/) unified agent on windows and linux systems.
 
 ### Sample Usage
 
@@ -25,23 +14,9 @@ class { 'ruxit_agent':
   ruxit_token   => 'TOKEN',
 }
 ```
-This example will download the stable release agent to a directory owned by user/group test and connect it to the given ruxit tenant.
+This example will download the current stable release agent to a directory owned by user/group test and connect it to the given ruxit tenant.
 
 #### Example 2
-```puppet
-class { 'ruxit_agent':
-  user          => 'test',
-  group         => 'test',
-  ruxit_host    => 'https://yxcvbnm.ruxit.com',
-  ruxit_tenant  => 'yxcvbnm',
-  ruxit_token   => 'TOKEN',
-  version       => 'XYZ',
-  channel       => 'unstable',
-}
-```
-This example will install the ruxit agent in version XYZ from the unstable channel.
-
-#### Example 3 
 ```puppet
 class { 'ruxit_agent': }
 ```
@@ -85,7 +60,7 @@ If set to an empty string the latest version for the channel will be installed.
 Defaults to '' -> latest
 
 ####`channel`
-Define the install/update channel you want to use.
+Define the install/update channel you want to use. This is for ruxit internal purposes only right now.
 * dev -> development branch (highly unstable)
 * sprint -> development branch (unstable)
 * unstable -> release branch (unstable)
