@@ -9,7 +9,7 @@ This module downloads and installs the [ruxit](http://www.ruxit.com/) unified ag
 class { 'ruxit_agent':
   user          => 'test',
   group         => 'test',
-  ruxit_host    => 'https://yxcvbnm.ruxit.com',
+  ruxit_host    => 'https://yxcvbnm.live.ruxit.com',
   ruxit_tenant  => 'yxcvbnm',
   ruxit_token   => 'TOKEN',
 }
