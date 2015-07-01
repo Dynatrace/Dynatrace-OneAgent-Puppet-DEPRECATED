@@ -1,3 +1,6 @@
+# start Windows service
+#   Parameter:
+#   * $service_name: Service name that should be started
 define ruxit_agent::resources::windows_startservice ($service_name) {
   $cmd = 'C:\\Windows\\System32\\cmd.exe'
   exec { "start_${name}":

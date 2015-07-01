@@ -14,7 +14,7 @@ Facter.add(:ruxit_latest_version_unstable) do
     rescue StandardError => e
       Puppet.crit("Exception in ruxit_latest_version_unstable  -> \n#{e.inspect}")
     end
-    Puppet.info("Latest ruxit agent UNSTABLE version  -> '#{version}'")
+    Puppet.debug("Latest ruxit agent UNSTABLE version  -> '#{version}'")
     version
   end
 end

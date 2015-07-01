@@ -14,7 +14,7 @@ Facter.add(:ruxit_latest_version_dev) do
     rescue StandardError => e
       Puppet.crit("Exception in ruxit_latest_version_dev  -> \n#{e.inspect}")
     end
-    Puppet.info("Latest ruxit agent DEV version -> '#{version}'")
+    Puppet.debug("Latest ruxit agent DEV version -> '#{version}'")
     version
   end
 end

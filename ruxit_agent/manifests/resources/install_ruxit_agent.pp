@@ -1,3 +1,4 @@
+# install ruxit agent binary
 define ruxit_agent::resources::install_ruxit_agent {
 
   if $::kernel =~ /Linux/ {
@@ -12,19 +13,19 @@ define ruxit_agent::resources::install_ruxit_agent {
     timeout   => 600,
     logoutput => true,
     require   => [
-      File[$ruxit_agent::install_dir], 
-      File[$ruxit_agent::install_script], 
+      File[$ruxit_agent::install_dir],
+      File[$ruxit_agent::install_script],
       Download['ruxit_installer_download']
       ]
   }
 
   # restart the agent
   if $::kernel =~ /Linux/ {
-    ruxit_agent::resources::linux_restartservice_initd{ 'ruxitagent' : 
+    ruxit_agent::resources::linux_restartservice_initd{ 'ruxitagent' :
       subscribe => Exec['install_ruxit_agent']
     }
   } else {
-    ruxit_agent::resources::windows_restartservice{ 'ruxit Agent' : 
+    ruxit_agent::resources::windows_restartservice{ 'ruxit Agent' :
       subscribe => Exec['install_ruxit_agent']
     }
   }

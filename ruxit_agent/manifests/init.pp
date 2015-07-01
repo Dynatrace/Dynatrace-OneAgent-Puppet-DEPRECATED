@@ -109,13 +109,11 @@ class ruxit_agent (
       uri     => "${src}/${installer}",
       dest    => "${install_dir}/${installer}",
       require => File[$install_dir]
-    } 
+    }
     ->
     ruxit_agent::resources::install_ruxit_agent { $ruxit_required_version: }
     ->
     ruxit_agent::resources::restart_services_hook { $service_restarts: }
-    
   }
   # end install
 }
-

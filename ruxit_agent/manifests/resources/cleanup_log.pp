@@ -4,7 +4,7 @@
 #
 define ruxit_agent::resources::cleanup_log ($days_to_keep) {
   if $::kernel == 'windows' {
-    $path = "C:\\Program Files (x86)\\ruxit\\log"
+    $path = 'C:\\Program Files (x86)\\ruxit\\log'
   } elsif $::kernel == 'Linux' {
     $path = '/opt/ruxit/log'
   }

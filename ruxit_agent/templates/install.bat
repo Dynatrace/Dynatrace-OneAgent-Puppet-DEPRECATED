@@ -36,10 +36,8 @@ if %STATUSCODE% EQU 0 (
 ) ELSE (
 	ECHO "Error while installing ruxit Agent!"
 	EXIT 1
-)	
+)
 
 :timeout
 ECHO Timeout while installing ruxit Agent!
 EXIT 2
-
-

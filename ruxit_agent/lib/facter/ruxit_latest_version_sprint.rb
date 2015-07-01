@@ -14,7 +14,7 @@ Facter.add(:ruxit_latest_version_sprint) do
     rescue StandardError => e
       Puppet.crit("Exception in ruxit_latest_version_sprint  -> \n#{e.inspect}")
     end
-    Puppet.info("Latest ruxit agent SPRINT version  -> '#{version}'")
+    Puppet.debug("Latest ruxit agent SPRINT version  -> '#{version}'")
     version
   end
 end
