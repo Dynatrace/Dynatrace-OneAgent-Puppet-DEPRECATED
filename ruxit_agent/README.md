@@ -51,7 +51,15 @@ The ruxit server to connect to. This defaults to the https://{tenant}.live.ruxit
 Your ruxit tenant ID.
 
 ####`ruxit_token`
-The token for your ruxit tenant.
+The token for your ruxit tenant. You can get your token by following these steps
+
+1. go to your ruxit environment: https://{tenant}.live.ruxit.com
+2. Click the burger menu in the right upper corner and select **Monitor another host**
+3. You will see the "Download Ruxit Agent" wizard; click **Linux** (even if you need Windows)
+4. You will see the **wget** command line. The token is the last part of the path after **/latest/**
+    <code>wget -O ruxit-Agent-Linux-1.XX.0.2015XXXX-XXXXXX.sh https://{tenant}.live.ruxit.com/installer/agent/unix/latest/{this-is-the-token}<code>
+5. copy it and use it in your puppet config
+
 
 ####`version`
 If set the defined version of the ruxit agent will be installed. 
