@@ -45,7 +45,7 @@ The owner of files.
 The group for the owner of files.
 
 ####`ruxit_tenant`
-Your ruxit tenant ID is the unique identifier of your ruxit environment. You can find it easily by looking at the URL your browser when you are logged into your Ruxit home page. 
+Your ruxit tenant ID is the unique identifier of your ruxit environment. You can find it easily by looking at the URL in your browser when you are logged into your Ruxit home page.
 
 <code>https://{tenant}.live.ruxit.com</code>
 
