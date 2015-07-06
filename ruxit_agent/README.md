@@ -13,7 +13,7 @@ class { 'ruxit_agent':
   ruxit_token   => 'TOKEN',
 }
 ```
-This example will download the current stable release agent to a directory owned by user/group test and connect it to the given ruxit tenant.
+This example will download the current stable release agent to a directory owned by user/group test and connect it to the given ruxit tenant. [Tenant id](#ruxit_tenant) and [tenant token](#ruxit_token) are required in order to connect the ruxit agent to your account.
 
 #### Example 2
 ```puppet
@@ -44,11 +44,12 @@ The owner of files.
 ####`group`
 The group for the owner of files.
 
-####`ruxit_server`
-The ruxit server to connect to. This defaults to the https://{tenant}.live.ruxit.com
-
 ####`ruxit_tenant`
-Your ruxit tenant ID.
+Your ruxit tenant ID is the unique identifier of your ruxit environment. You can find it easily by looking at the URL your broswer when you are logged into your Ruxit home page. 
+
+<code>https://{tenant}.live.ruxit.com</code>
+
+The subdomain {tenant} represents your tenant id.
 
 ####`ruxit_token`
 The token for your ruxit tenant. You can get your token by following these steps
@@ -60,6 +61,9 @@ The token for your ruxit tenant. You can get your token by following these steps
     
     <code>wget -O ruxit-Agent-Linux-1.XX.0.2015XXXX-XXXXXX.sh https://{tenant}.live.ruxit.com/installer/agent/unix/latest/{this-is-the-token}</code>
 5. copy it and use it in your puppet config
+
+####`ruxit_server`
+The ruxit server to connect to. This defaults to the https://{tenant}.live.ruxit.com
 
 
 ####`version`
