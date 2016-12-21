@@ -24,5 +24,5 @@
   "requirements": [],
   "summary": "This downloads and installs the ruxit agent",
   "tags": [ "install", "upgrade", "ruxit", "agent" ],
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
