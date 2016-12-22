@@ -49,12 +49,6 @@ class ruxit_agent (
     $install_script = 'install.bat'
   }
 
-  if versioncmp('1.100', $version) > 0 {
-    $statusfile = 'ruxit'
-  } else {
-    $statusfile = 'oneagent'
-  }
-
   # required version and source selection
   case $channel {
     /dev/      : {
@@ -83,6 +77,12 @@ class ruxit_agent (
     default => $version
   }
   $script_mode = '0777'
+
+  if versioncmp('1.100', $ruxit_required_version) > 0 {
+    $statusfile = 'ruxit'
+  } else {
+    $statusfile = 'oneagent'
+  }
 
   # trigger log cleanup on every run -> has a schedule defined
   ruxit_agent::resources::cleanup_log { 'cleanup_ruxit_logs': days_to_keep => $log_keep_days }
