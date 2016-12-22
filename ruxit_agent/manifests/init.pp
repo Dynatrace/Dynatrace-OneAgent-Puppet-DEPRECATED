@@ -49,6 +49,12 @@ class ruxit_agent (
     $install_script = 'install.bat'
   }
 
+  if versioncmp('1.100', $version) > 0 {
+    $statusfile = 'ruxit'
+  } else {
+    $statusfile = 'oneagent'
+  }
+
   # required version and source selection
   case $channel {
     /dev/      : {

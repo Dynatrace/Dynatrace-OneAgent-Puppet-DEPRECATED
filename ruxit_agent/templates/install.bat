@@ -6,7 +6,7 @@ set TENANT=<%= @ruxit_tenant %>
 set TOKEN=<%= @ruxit_token %>
 set PROCESSHOOKING=1
 set INSTALL_CMD=msiexec /quiet /i
-set STATUSFILE=%appdata%\ruxit\installation.status
+set STATUSFILE=%appdata%\<%= @statusfile %>\installation.status
 
 %INSTALL_CMD% %INSTALLER_DIR%\%INSTALLER% SERVER=%SERVER% TENANT=%TENANT% PROCESSHOOKING=%PROCESSHOOKING% TENANT_TOKEN=%TOKEN%
 

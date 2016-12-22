@@ -11,7 +11,7 @@ define ruxit_agent::resources::install_ruxit_agent ($required_version = '') {
     $servicename_windows = 'ruxit Agent'
   } else {
     $servicename_linux = 'oneagent'
-    $servicename_windows = 'one Agent'
+    $servicename_windows = 'Dynatrace OneAgent'
   }
 
   exec { 'install_ruxit_agent':
