@@ -2,7 +2,7 @@
 #   Parameter:
 #   * $days_to_keep: how many days should be kept
 #
-define ruxit_agent::resources::cleanup_log ($days_to_keep) {
+define oneagent::resources::cleanup_log ($days_to_keep) {
   if $::ruxit_installed_version != '0.0.0.0' {
     if $::kernel == 'windows' {
       $path = 'C:\\Program Files (x86)\\ruxit\\log'

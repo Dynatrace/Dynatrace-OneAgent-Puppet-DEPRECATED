@@ -5,10 +5,6 @@
 
 INSTALLER_DIR=<%= @install_dir %>
 INSTALLER=<%= @installer %>
-SERVER=<%= @ruxit_host %>
-TENANT=<%= @ruxit_tenant %>
-TOKEN=<%= @ruxit_token %>
-PROCESSHOOKING=1
 
 CHMOD=`/usr/bin/which chmod`
 CHOWN=`/usr/bin/which chown`
@@ -17,12 +13,12 @@ CHOWN=`/usr/bin/which chown`
 $CHMOD 774 $INSTALLER_DIR/$INSTALLER
 $CHOWN -R <%= @user %>:<%= @group %> $INSTALLER_DIR
 
-$INSTALLER_DIR/$INSTALLER SERVER=$SERVER TENANT=$TENANT PROCESSHOOKING=$PROCESSHOOKING TENANT_TOKEN=$TOKEN
+$INSTALLER_DIR/$INSTALLER
 if [ $? -ne 0 ]; then
-    echo "Error while installing ruxit agent!"
+    echo "Error while installing oneAgent!"
     exit 1
 else
-	echo "Install of ruxit agent succeeded!"
+	echo "Install of oneAgent succeeded!"
 fi
 
 exit 0
