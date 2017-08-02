@@ -4,7 +4,7 @@
   "author": "ruxitlabs",
   "summary": "This module downloads and installs the dynatrace one agent",
   "license": "MIT",
-  "source": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet"
+  "source": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet",
   "project_page": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet",
   "issues_url": "https://www.dynatrace.com/support",
   "tags": [ "install", "upgrade", "dynatrace", "agent" ],
