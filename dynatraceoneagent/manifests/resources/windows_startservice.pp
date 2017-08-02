@@ -1,7 +1,7 @@
 # start Windows service
 #   Parameter:
 #   * $service_name: Service name that should be started
-define oneagent::resources::windows_startservice ($service_name) {
+define dynatraceoneagent::resources::windows_startservice ($service_name) {
   $cmd = 'C:\\Windows\\System32\\cmd.exe'
   exec { "start_${name}":
     command => "${cmd} /c sc start \"${service_name}\"",

@@ -1,5 +1,5 @@
 # install one agent binary
-define oneagent::resources::install_oneagent () {
+define dynatraceoneagent::resources::install_oneagent () {
   if $::kernel =~ /Linux/ {
     $install_dest_dir = '/opt/ruxit/agent'
   } else {

@@ -11,7 +11,7 @@
 #   * $service_restarts => string array with services that should be restarted after install/upgrade
 #                          defaults to an empty array -> no additional service restarts
 #
-class oneagent (
+class dynatraceoneagent (
   $download_link,
   $user             ='dynatrace',
   $group            ='dynatrace',

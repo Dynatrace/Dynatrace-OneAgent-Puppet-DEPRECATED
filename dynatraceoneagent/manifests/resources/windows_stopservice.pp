@@ -2,7 +2,7 @@
 #   Parameter:
 #   * $service_name: Service name that should be stopped
 #   * $refreshonly: refresh only
-define oneagent::resources::windows_stopservice (
+define dynatraceoneagent::resources::windows_stopservice (
     $service_name,
     $refreshonly = false)
 {

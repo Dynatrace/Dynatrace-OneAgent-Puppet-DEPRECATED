@@ -1,7 +1,7 @@
 # Restart Windows service
 #   Parameter:
 #   * name: Service name that should be restarted
-define oneagent::resources::windows_restartservice () {
+define dynatraceoneagent::resources::windows_restartservice () {
   oneagent::resources::windows_stopservice{"restart_stop_${name}":
     service_name => $name
   }

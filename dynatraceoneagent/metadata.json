@@ -1,0 +1,28 @@
+{
+  "name": "dynatraceoneagent",
+  "version": "0.1.0",
+  "author": "ruxitlabs",
+  "summary": "This module downloads and installs the dynatrace one agent",
+  "license": "MIT",
+  "source": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet/tree/master/oneagent"
+  "project_page": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet/tree/master/oneagent",
+  "issues_url": "https://www.dynatrace.com/support",
+  "tags": [ "install", "upgrade", "dynatrace", "agent" ],
+  "operatingsystem_support": [{
+                        "operatingsystem": "Windows"
+                },{
+                        "operatingsystem": "RedHat"
+                },{
+                        "operatingsystem": "Ubuntu"
+                },{
+                        "operatingsystem": "Debian"
+                },{
+                        "operatingsystem": "CentOS"
+                }
+        ],
+
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+}
+
