@@ -32,7 +32,7 @@ The link to dynatrace one agent. You can get your link by following these steps
 2. Click the **Start installation** button.
 3  For **Linux** 
    - Locate your `download_link`, as shown below. 
-    ![Alt text](https://help.dynatrace.com/images/content/infrastructure-monitoring/containers/openshift-installer.png)
+    ![Alt text](https://user-images.githubusercontent.com/23307837/31119408-339a41c4-a831-11e7-8794-3e526e5ae533.png)
 4. For **Windows**
     - Rightclick on "Download agent.exe" button and select "Copy link address"
 5. Use the link in your puppet config.
