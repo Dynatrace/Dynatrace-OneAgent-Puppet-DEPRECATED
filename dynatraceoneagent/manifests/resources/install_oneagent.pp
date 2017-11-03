@@ -10,10 +10,10 @@ define dynatraceoneagent::resources::install_oneagent () {
   $servicename_windows = 'Dynatrace OneAgent'
 
   exec { 'install_oneagent':
-    command   => "${oneagent::install_dir}/${oneagent::install_script}",
-    cwd       => $oneagent::install_dir,
+    command   => "${dynatraceoneagent::install_dir}/${dynatraceoneagent::install_script}",
+    cwd       => $dynatraceoneagent::install_dir,
     timeout   => 6000,
     logoutput => true,
-    require   => [File[$oneagent::install_dir], File[$oneagent::install_script], File['dynatrace_installer_download']]
+    require   => [File[$dynatraceoneagent::install_dir], File[$dynatraceoneagent::install_script], File['dynatrace_installer_download']]
   }
 }
