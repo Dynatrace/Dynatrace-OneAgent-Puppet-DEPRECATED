@@ -36,7 +36,7 @@ class dynatraceoneagent (
   $script_mode = '0777'
 
   # trigger log cleanup on every run -> has a schedule defined
-  oneagent::resources::cleanup_log { 'cleanup_dynatrace_logs': days_to_keep => $log_keep_days }
+  dynatraceoneagent::resources::cleanup_log { 'cleanup_dynatrace_logs': days_to_keep => $log_keep_days }
 
   # Only do the install steps if there is no one agent installed
   if ($::ruxit_installed_version == '0.0.0.0' and $::oneagent_installed_version == '0.0.0.0') {
@@ -44,7 +44,7 @@ class dynatraceoneagent (
     # create the download directory
     file { $install_dir:
       ensure => directory,
-      owner  => $::usr,
+      owner  => $user,
     }
 
     # get the install script from template
@@ -57,7 +57,7 @@ class dynatraceoneagent (
       group   => $group,
       mode    => $script_mode,
       require => File[$install_dir],
-      content => template("oneagent/${install_script}"),
+      content => template("dynatraceoneagent/${install_script}"),
     }
 
     # download the installer
@@ -67,8 +67,8 @@ class dynatraceoneagent (
       path    => "${install_dir}/${installer}",
       require => File[$install_dir]
     }
-    ->  oneagent::resources::install_oneagent{ 'install_oneagent': }
-    ->  oneagent::resources::restart_services_hook { $service_restarts: }
+    ->  dynatraceoneagent::resources::install_oneagent{ 'install_oneagent': }
+    ->  dynatraceoneagent::resources::restart_services_hook { $service_restarts: }
   }
   # end install
 }
