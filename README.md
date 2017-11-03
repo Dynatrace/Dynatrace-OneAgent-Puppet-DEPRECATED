@@ -7,7 +7,7 @@ To find details about installing OneAgent visit Dynatrace [help page](https://he
 
 ##### Example 1
 ```puppet
-class{ 'oneagent':
+class{ 'dynatraceoneagent':
        download_link => 'https://12tenant34.live.dynatrace.com/installer/oneagent/unix/latest/12token34',
      }
 ```
