@@ -1,6 +1,6 @@
 {
   "name": "dynatraceoneagent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "ruxitlabs",
   "summary": "This module downloads and installs the dynatrace one agent",
   "license": "MIT",
