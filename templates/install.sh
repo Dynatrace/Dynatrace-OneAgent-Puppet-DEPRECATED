@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Installs the ruxit linux agent 
+# Installs the ruxit linux agent
 #
 
 INSTALLER_DIR=<%= @install_dir %>
@@ -13,7 +13,7 @@ CHOWN=`/usr/bin/which chown`
 $CHMOD 774 $INSTALLER_DIR/$INSTALLER
 $CHOWN -R <%= @user %>:<%= @group %> $INSTALLER_DIR
 
-$INSTALLER_DIR/$INSTALLER
+$INSTALLER_DIR/$INSTALLER <%= @install_args.join(' ') %>
 if [ $? -ne 0 ]; then
     echo "Error while installing oneAgent!"
     exit 1

@@ -10,14 +10,16 @@
 #   * $log_keep_days    => set the number of days you want to keep logs => defaults to 14
 #   * $service_restarts => string array with services that should be restarted after install/upgrade
 #                          defaults to an empty array -> no additional service restarts
-#
+#   * $install_args     => array of strings for install time arguments (empty by default)
 class dynatraceoneagent (
   $download_link,
   $user             ='dynatrace',
   $group            ='dynatrace',
   $log_keep_days    = '14',
   $statusfile       = 'oneagent',
-  $service_restarts = []) {
+  $service_restarts = [],
+  $install_args     = [],
+) {
 
   # os specific definitions
   if $::kernel =~ /Linux/ {

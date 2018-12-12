@@ -4,7 +4,7 @@ set INSTALLER=<%= @installer %>
 set INSTALL_CMD=msiexec /quiet /i
 set STATUSFILE=%appdata%\<%= @statusfile %>\installation.status
 
-%INSTALL_CMD% %INSTALLER_DIR%\%INSTALLER%
+%INSTALL_CMD% %INSTALLER_DIR%\%INSTALLER% <%= @install_args.join(' ') %>
 
 rem The status file is created by the installer. In case there was an agent installed earlier it could still be 
 rem there so we wait until the installer had the chance to remove it.
