@@ -13,6 +13,7 @@
 #
 class dynatraceoneagent (
   $download_link,
+  $manage_user      = true,
   $user             ='dynatrace',
   $group            ='dynatrace',
   $log_keep_days    = '14',
@@ -37,6 +38,20 @@ class dynatraceoneagent (
 
   # trigger log cleanup on every run -> has a schedule defined
   dynatraceoneagent::resources::cleanup_log { 'cleanup_dynatrace_logs': days_to_keep => $log_keep_days }
+
+  # dynatrace user
+  if $manage_user {
+    group { $group:
+      ensure => 'present',
+    }
+
+    user { $user:
+      ensure     => 'present',
+      comment    => 'DynaTrace OneAgent',
+      gid        => $group,
+      managehome => true,
+    }
+  }
 
   # Only do the install steps if there is no one agent installed
   if ($::ruxit_installed_version == '0.0.0.0' and $::oneagent_installed_version == '0.0.0.0') {
