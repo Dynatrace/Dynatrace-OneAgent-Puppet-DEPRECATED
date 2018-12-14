@@ -61,11 +61,12 @@ class dynatraceoneagent (
     }
 
     # download the installer
-    file { 'dynatrace_installer_download':
-      ensure  => present,
-      source  => $download_link,
-      path    => "${install_dir}/${installer}",
-      require => File[$install_dir]
+    wget::fetch { 'dynatrace_installer_download':
+      source      => $download_link,
+      destination => "${install_dir}/${installer}",
+      execuser    => $user,
+      group       => $group,
+      require     => File[$install_dir]
     }
     ->  dynatraceoneagent::resources::install_oneagent{ 'install_oneagent': }
     ->  dynatraceoneagent::resources::restart_services_hook { $service_restarts: }
