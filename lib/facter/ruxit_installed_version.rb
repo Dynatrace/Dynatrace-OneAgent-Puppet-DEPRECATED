@@ -19,20 +19,27 @@ Facter.add(:ruxit_installed_version) do
       else
         file = 'C:/Program Files/ruxit/agent/conf/binaries.json'
         os_key = 'windows-x86-64'
-      end 
-    else
+      end
+    elsif Facter.value('kernel').eql? 'Linux'
       file = '/opt/ruxit/agent/conf/binaries.json'
       if Facter.value('architecture').eql? 'x64'
         os_key = 'linux-x86-64'
       else
         os_key = 'linux-x86-32'
       end
+    elsif Facter.value('kernel').eql? 'AIX'
+      file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
+      if Facter.value('architecture').eql? 'x64'
+        os_key = 'aix-ppc-64'
+      else
+        os_key = 'aix-ppc-32'
+      end
     end
-    if nil != file 
+    if nil != file
       begin
         if File.exists?(file)
           if File.stat(file).size < (1024 * 15) # don't read files larger than 15KB
-            begin  
+            begin
               file_content = File.read(file)
             rescue IOError => e
               raise "IO error: #{e.inspect}"

@@ -20,12 +20,19 @@ Facter.add(:oneagent_installed_version) do
         file = 'C:/Program Files/dynatrace/oneagent/agent/conf/binaries.json'
         os_key = 'windows-x86-64'
       end
-    else
+    elsif Facter.value('kernel').eql? 'Linux'
       file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
       if Facter.value('architecture').eql? 'x64'
         os_key = 'linux-x86-64'
       else
         os_key = 'linux-x86-32'
+      end
+    elsif Facter.value('kernel').eql? 'AIX'
+      file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
+      if Facter.value('architecture').eql? 'x64'
+        os_key = 'aix-ppc-64'
+      else
+        os_key = 'aix-ppc-32'
       end
     end
     if nil != file

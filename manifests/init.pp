@@ -31,6 +31,13 @@ class dynatraceoneagent (
     $install_dir = "${usr_home}\\oneagent"
     $installer = 'oneagent-Windows.msi'
     $install_script = 'install.bat'
+  } elsif $::kernel =~ /AIX/ {
+    $usr_home = "/home/${user}"
+    $install_dir = "${usr_home}/oneagent"
+    $installer = 'oneagent-AIX.sh'
+    $install_script = 'install.sh'
+  } else {
+    fail("dynatraceoneagent module does not support ${::operatingsystem}")
   }
 
   $script_mode = '0777'
