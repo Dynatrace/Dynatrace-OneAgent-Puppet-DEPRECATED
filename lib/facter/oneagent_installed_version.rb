@@ -22,17 +22,17 @@ Facter.add(:oneagent_installed_version) do
       end
     elsif Facter.value('kernel').eql? 'Linux'
       file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
-      if Facter.value('architecture').eql? 'x64'
+      if Facter.value('architecture').include? '64'
         os_key = 'linux-x86-64'
       else
         os_key = 'linux-x86-32'
       end
     elsif Facter.value('kernel').eql? 'AIX'
       file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
-      if Facter.value('architecture').eql? 'x64'
-        os_key = 'aix-ppc-64'
-      else
+      if Facter.value('architecture').eql? 'SOMETHING_32_BIT' # FIXME: Find a fact that indicates 32bit OS
         os_key = 'aix-ppc-32'
+      else
+        os_key = 'aix-ppc-64'
       end
     end
     if nil != file
