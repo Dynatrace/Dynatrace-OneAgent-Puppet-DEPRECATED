@@ -29,11 +29,8 @@ Facter.add(:oneagent_installed_version) do
       end
     elsif Facter.value('kernel').eql? 'AIX'
       file = '/opt/dynatrace/oneagent/agent/conf/binaries.json'
-      if Facter.value('architecture').eql? 'SOMETHING_32_BIT' # FIXME: Find a fact that indicates 32bit OS
-        os_key = 'aix-ppc-32'
-      else
-        os_key = 'aix-ppc-64'
-      end
+      bit = Facter::Core::Execution.execute('getconf KERNEL_BITMODE')
+      os_key = "aix-ppc-#{bit}"
     end
     if nil != file
       begin
