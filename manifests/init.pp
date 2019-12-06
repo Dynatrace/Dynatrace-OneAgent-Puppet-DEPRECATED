@@ -47,7 +47,7 @@ class dynatraceoneagent (
   String $default_install_dir            = $dynatraceoneagent::params::default_install_dir,
   Hash $oneagent_params_hash             = $dynatraceoneagent::params::oneagent_params_hash,
 
-  Boolean $reboot_system       = $dynatraceoneagent::params::reboot_system,
+  Boolean $reboot_system                 = $dynatraceoneagent::params::reboot_system,
 
 ) inherits dynatraceoneagent::params {
 
