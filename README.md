@@ -63,8 +63,6 @@ Since the oneagent install parameter INSTALL_PATH can be defined within a hash m
 
 For further information on how to handle file paths on Windows, visit [Handling file paths on Windows](https://puppet.com/docs/puppet/4.10/lang_windows_file_paths.html)
 
-## Reference
-
 ## Parameters
 
 ### `tenant_url` - required
@@ -74,7 +72,7 @@ URL of your dynatrace Tenant
 - Managed: `https://{your-domain}/e/{your-environment-id}`
 - SaaS: `https://{your-environment-id}.live.dynatrace.com`
 
-### `$paas_token` - required
+### `paas_token` - required
 
 PAAS token for downloading one agent installer
 
