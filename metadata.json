@@ -1,0 +1,78 @@
+{
+  "name": "dynatrace-dynatraceoneagent",
+  "version": "0.5.0",
+  "author": "Dynatrace LLC",
+  "summary": "This puppet module downloads and installs the dynatrace OneAgent agent on windows, linux and AIX systems",
+  "license": "MIT",
+  "source": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet",
+  "project_page": "https://github.com/Dynatrace/Dynatrace-OneAgent-Puppet",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2019",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": [
+        "29"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.14.1",
+  "template-url": "pdk-default#1.14.1",
+  "template-ref": "1.14.1-0-g0b5b39b"
+}
