@@ -16,7 +16,7 @@ Add AIX support
 
 Add support for OneAgent Install Params
 
-Inplement Archive module for OneAgent installer downloads
+Implement Archive module for OneAgent installer downloads
 
 Reboot functionality included
 
