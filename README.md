@@ -1,79 +1,109 @@
-## Overview
+# Dynatrace OneAgent module for puppet
 
-This module downloads and installs the [dynatrace](http://www.dynatrace.com/) unified agent on windows and linux systems.
-To find details about installing OneAgent visit Dynatrace [help page](https://help.dynatrace.com/get-started/installation/how-do-i-install-dynatrace-oneagent/).
+## Description
 
-### Sample Usage
+This module installs the OneAgent on Linux, Windows and AIX Operating Systems
 
-##### Example 1
-```puppet
-class{ 'dynatraceoneagent':
-       download_link => 'https://12tenant34.live.dynatrace.com/installer/oneagent/unix/latest/12token34',
-     }
-```
-This example will download the dynatrace one agent and connect it to the given dynatrace tenant.
+## Requirements
 
-### License
-This module is provided under BSD-3-Clause license. Please check out the details in the LICENSE.txt
+Requires [puppet/archive](https://forge.puppet.com/puppet/archive)
 
-## Reference
+Requires [puppet-labs/reboot](https://forge.puppet.com/puppetlabs/reboot) for Windows reboots
 
-### Classes
-#####  oneagent: 
-Main class, includes everything else
+## Installation
 
-### Parameters
-The following parameters are available in the `oneagent` class:
+Available from GitHub (via cloning) or via Puppet forge [dynatrace/dynatraceoneagent](https://forge.puppet.com/dynatrace/dynatraceoneagent)
 
-##### `download_link`
-The link to dynatrace one agent. You can get your link by following these steps
+Refer to the customize OneAgent installation documentation on [Dynatrace Supported Operating Systems](https://www.dynatrace.com/support/help/technology-support/operating-systems/)
 
-1. Select **Deploy Dynatrace** from the navigation menu.
-2. Click the **Start installation** button.
-3  For **Linux** 
-   - Locate your `download_link`, as shown below. 
-    ![Alt text](https://user-images.githubusercontent.com/23307837/31234263-bf223030-a9ee-11e7-94f8-69945b82e791.png)
-4. For **Windows**
-    - Rightclick on "Download agent.exe" button and select "Copy link address"
-5. Use the link in your puppet config.
+This module uses the Dynatrace deployment API for downloading the installer for each supported OS. See [Deployment API](https://www.dynatrace.com/support/help/extend-dynatrace/dynatrace-api/environment-api/deployment/)
 
+## Usage
 
-##### `user`
-The owner of files. 
-!! This user is not created by this module. Please make sure it exists. !!
+Look at init.pp to see what can be configured.
 
-##### `group`
-The group for the owner of files.
+Default OneAgent install parameters defined in params.pp as a hash map: INFRA_ONLY=0, APP_LOG_CONTENT_ACCESS=1
 
-##### `log_keep_days`
-Sets the number of days you want to keep logs.
-defaults to 14 days
+Sample latest OneAgent version installation using a SAAS tenant
 
-##### `service_restarts` 
-String array with services that should be restarted after install/upgrade.
-defaults to an empty array -> no additional service restarts
+    class { 'dynatraceoneagent':
+        tenant_url  => 'https://{your-environment-id}.live.dynatrace.com',
+        paas_token  => '{your-paas-token}',
+    }
 
-### Resources
+Sample OneAgent installation using a managed tenant with a specific version. The required version of the OneAgent must be in 1.155.275.20181112-084458 format. See [Deployment API - GET available versions of OneAgent](https://www.dynatrace.com/support/help/extend-dynatrace/dynatrace-api/environment-api/deployment/oneagent/get-available-versions/)
 
-##### `cleanup_log`
-A resource cleaning all files in a given directory that were not modified in the given time frame.
+    class { 'dynatraceoneagent':
+        tenant_url  => 'https://{your-domain}/e/{your-environment-id}',
+        paas_token  => '{your-paas-token}',
+        version     => '1.181.63.20191105-161318',
+    }
 
-##### `install_oneagent`
-Installs the agent from and to the paths defined in the main class.
+## Advanced configuration
 
-##### `restart_services_hook`
-This resource is called after the installation of the dynatrace one agent to restart services that should be instrumented.
-You can define the services as a parameter of the main class: service_restarts
+Download OneAgent installer to a custom directory with additional OneAgent install parameters and reboot server after install should be defined as follows (will override default install params):
 
-##### `windows_restart_service`
-A resource wrapper for service stop and start.
+    class { 'dynatraceoneagent':
+        tenant_url            => 'https://{your-environment-id}.live.dynatrace.com',
+        paas_token            => '{your-paas-token}',
+        version               => '1.181.63.20191105-161318',
+        download_dir          => 'C:\\Download Dir\\',
+        reboot_system         => true,
+        oneagent_params_hash  => {
+            'INFRA_ONLY'             => '0',
+            'APP_LOG_CONTENT_ACCESS' => '1',
+            'HOST_GROUP'             => 'PUPPET_WINDOWS',
+            'INSTALL_PATH'           => 'C:\Test Directory',
+        }
+    }
 
-##### `windows_restart_service`
-A resource starting a given windows service.
+For Windows, because download_dir is a string variable, 2 backslashes are required
 
-##### `windows_restart_service`
-A resource stopping a given windows service.
+Since the oneagent install parameter INSTALL_PATH can be defined within a hash map, no escaping is needed for Windows file paths
 
-## Supported OSes
-This module is designed for Windows and Linux systems. 
-If it does not work for your environment please get in touch via the project site.
+For further information on how to handle file paths on Windows, visit [Handling file paths on Windows](https://puppet.com/docs/puppet/4.10/lang_windows_file_paths.html)
+
+## Parameters
+
+### `tenant_url` - required
+
+URL of your dynatrace Tenant
+
+- Managed: `https://{your-domain}/e/{your-environment-id}`
+- SaaS: `https://{your-environment-id}.live.dynatrace.com`
+
+### `paas_token` - required
+
+PAAS token for downloading one agent installer
+
+### `version` - optional
+
+The required version of the OneAgent in 1.155.275.20181112-084458 format - default is latest
+
+### `arch` - optional
+
+The architecture of your OS - default is all
+
+### `installer_type` - optional
+
+The type of the installer - default is default
+
+### `download_dir` - optional
+
+OneAgent installer file download directory. Defaults are:
+
+- Linux/AIX : `/tmp/`
+- Windows   : `C:\Windows\Temp\`
+
+### `oneagent_params_hash` - optional
+
+Hash map of additional parameters to pass to the installer
+
+Default OneAgent install parameters defined in params.pp as a hash map:
+
+- `INFRA_ONLY => 0`
+- `APP_LOG_CONTENT_ACCESS => 1`
+
+### `reboot_system` - optional
+
+If set to true, puppet will reboot the server after installing the OneAgent - default is false
