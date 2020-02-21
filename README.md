@@ -84,8 +84,8 @@ Configure values to automatically add tags and metadata to a host and override a
         host_tags        => 'TestHost Gdansk role=fallback',
         host_metadata    => 'Environment=Prod Organization=D1P Owner=john.doe@dynatrace.com Support=https://www.dynatrace.com/support',
         hostname         => 'apache-vm.puppet.vm',
+        }
     }
-}
 ```
 
 ## Reference
