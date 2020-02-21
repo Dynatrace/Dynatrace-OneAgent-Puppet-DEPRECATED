@@ -53,14 +53,14 @@ class dynatraceoneagent::service {
         refreshonly => true,
         subscribe   => Exec['install_oneagent'],
     }
-  } else {
-    notify { 'Not rebooting': }
   }
 
   service{ $service_name:
-      ensure  => running,
-      enable  => true,
-      require => $require_value,
+      ensure     => running,
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => $require_value,
   }
 
 }
