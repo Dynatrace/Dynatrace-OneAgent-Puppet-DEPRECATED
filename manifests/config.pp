@@ -12,35 +12,23 @@ class dynatraceoneagent::config {
   $hostname_config_file           = $dynatraceoneagent::hostname_config_file
   $service_name                   = $dynatraceoneagent::service_name
 
-  if !$host_tags {
-    $auto_tag = ''
-  } else{
-    $auto_tag = $host_tags
+  if $host_tags {
+    file { $hostautotag_config_file:
+      content => $host_tags,
+    }
   }
 
-  if !$host_metadata {
-    $auto_metadata = ''
-  } else{
-    $auto_metadata = $host_metadata
-  }
+  if $host_metadata {
+    file { $hostmetadata_config_file:
+      content => $host_metadata,
+    }
+  } 
 
-  if !$hostname {
-    $auto_hostname = ''
-  } else{
-    $auto_hostname = $hostname
-  }
-
-  file { $hostautotag_config_file:
-    content => $auto_tag,
-  }
-
-  file { $hostmetadata_config_file:
-    content => $auto_metadata,
-  }
-
-  file { $hostname_config_file:
-    content => $auto_hostname,
-    notify  => Service[$service_name],
+  if $hostname {
+    file { $hostname_config_file:
+      content => $hostname,
+      notify  => Service[$service_name],
+    }
   }
 
 }
