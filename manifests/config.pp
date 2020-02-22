@@ -14,21 +14,38 @@ class dynatraceoneagent::config {
 
   if $host_tags {
     file { $hostautotag_config_file:
+      ensure  => present,
       content => $host_tags,
     }
-  }
+  } else {
+      file { $hostautotag_config_file:
+        ensure  => present,
+        content => '',
+      }
+    }
 
   if $host_metadata {
     file { $hostmetadata_config_file:
+      ensure  => present,
       content => $host_metadata,
     }
-  } 
+  } else {
+      file { $hostmetadata_config_file:
+        ensure  => absent,
+      }
+   }
 
   if $hostname {
     file { $hostname_config_file:
+      ensure  => present,
       content => $hostname,
       notify  => Service[$service_name],
     }
-  }
+  } else {
+      file { $hostname_config_file:
+        ensure  => absent,
+        notify  => Service[$service_name],
+        } 
+   }
 
 }
