@@ -102,6 +102,6 @@ class dynatraceoneagent (
   contain dynatraceoneagent::service
 
   Class['::dynatraceoneagent::install']
-  ~> Class['::dynatraceoneagent::config']
-  ~> Class['::dynatraceoneagent::service']
+  -> Class['::dynatraceoneagent::config']
+  -> Class['::dynatraceoneagent::service']
 }
