@@ -1,8 +1,8 @@
 # Class: dynatraceoneagent  See README.md for documentation.
 # ============================================
 #
-# This module deploys the OneAgent on Linux, Windows and AIX Operating Systems with different available configurations and 
-# ensures the OneAgent service maintains a running state. It provides types/providers to interact with the various OneAgent configuration files.
+# This module deploys the OneAgent on Linux, Windows and AIX Operating Systems with different available configurations and ensures
+# the OneAgent service maintains a running state. It provides types/providers to interact with the various OneAgent configuration files.
 #
 #   Parameters for the OneAgent Download:
 #
