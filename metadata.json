@@ -1,6 +1,6 @@
 {
   "name": "dynatrace-dynatraceoneagent",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "author": "Dynatrace LLC",
   "summary": "This puppet module downloads and installs the dynatrace OneAgent agent on windows, linux and AIX systems",
   "license": "MIT",
@@ -72,7 +72,7 @@
       "version_requirement": ">= 4.10.0 < 7.0.0"
     }
   ],
-  "pdk-version": "1.14.1",
-  "template-url": "pdk-default#1.14.1",
-  "template-ref": "1.14.1-0-g0b5b39b"
+  "pdk-version": "1.16.0",
+  "template-url": "pdk-default#1.16.0",
+  "template-ref": "tags/1.16.0-0-gaf44904"
 }
