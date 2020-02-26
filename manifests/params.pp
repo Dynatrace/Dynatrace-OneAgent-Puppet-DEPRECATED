@@ -33,31 +33,34 @@ class dynatraceoneagent::params {
         #Parameters for Windows OneAgent Installer
         $service_name             = 'Dynatrace OneAgent'
         $provider                 = 'windows'
+        $require_value            = Package[$service_name]
         $hostautotag_config_file  = "${::common_appdata}\\dynatrace\\oneagent\\agent\\config\\hostautotag.conf"
         $hostmetadata_config_file = "${::common_appdata}\\dynatrace\\oneagent\\agent\\config\\hostcustomproperties.conf"
         $hostname_config_file     = "${::common_appdata}\\dynatrace\\oneagent\\agent\\config\\hostname.conf"
     } elsif $::osfamily == 'AIX' {
         #Parameters for AIX OneAgent Download
-        $os_type             = 'aix'
-        $download_dir        = '/tmp/'
+        $os_type                  = 'aix'
+        $download_dir             = '/tmp/'
         #Parameters for AIX OneAgent Installer
-        $service_name        = 'oneagent'
-        $provider            = 'shell'
-        $default_install_dir = '/opt/dynatrace/oneagent'
+        $service_name             = 'oneagent'
+        $provider                 = 'shell'
+        $default_install_dir      = '/opt/dynatrace/oneagent'
+        $require_value            = Exec['install_oneagent']
         $hostautotag_config_file  = '/var/lib/dynatrace/oneagent/agent/config/hostautotag.conf'
         $hostmetadata_config_file = '/var/lib/dynatrace/oneagent/agent/config/hostcustomproperties.conf'
         $hostname_config_file     = '/var/lib/dynatrace/oneagent/agent/config/hostname.conf'
     } elsif $::kernel == 'Linux' {
         #Parameters for Linux OneAgent Download
-        $os_type        = 'unix'
-        $download_dir   = '/tmp/'
+        $os_type                  = 'unix'
+        $download_dir             = '/tmp/'
         #Parameters for Linux OneAgent Installer
-        $service_name   = 'oneagent'
-        $provider       = 'shell'
-        $default_install_dir = '/opt/dynatrace/oneagent'
-        $hostautotag_config_file = '/var/lib/dynatrace/oneagent/agent/config/hostautotag.conf'
+        $service_name             = 'oneagent'
+        $provider                 = 'shell'
+        $default_install_dir      = '/opt/dynatrace/oneagent'
+        $require_value            = Exec['install_oneagent']
+        $hostautotag_config_file  = '/var/lib/dynatrace/oneagent/agent/config/hostautotag.conf'
         $hostmetadata_config_file = '/var/lib/dynatrace/oneagent/agent/config/hostcustomproperties.conf'
-        $hostname_config_file = '/var/lib/dynatrace/oneagent/agent/config/hostname.conf'
+        $hostname_config_file     = '/var/lib/dynatrace/oneagent/agent/config/hostname.conf'
     }
 
     #Set default install dir based on Windows architecture
