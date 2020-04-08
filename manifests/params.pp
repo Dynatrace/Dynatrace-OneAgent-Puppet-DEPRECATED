@@ -19,6 +19,7 @@ class dynatraceoneagent::params {
         'APP_LOG_CONTENT_ACCESS' => '1',
     }
     $reboot_system      = false
+    $proxy_server       = undef
 
     # OneAgent Host Configuration Parameters
 
