@@ -58,7 +58,7 @@ class dynatraceoneagent (
   String $default_install_dir            = $dynatraceoneagent::params::default_install_dir,
   Hash $oneagent_params_hash             = $dynatraceoneagent::params::oneagent_params_hash,
   Boolean $reboot_system                 = $dynatraceoneagent::params::reboot_system,
-  String $proxy_server                   = undef,
+  String $proxy_server                   = $dynatraceoneagent::params::proxy_server,
 
 # OneAgent Host Configuration Parameters
 
