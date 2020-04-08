@@ -17,7 +17,7 @@
 #   * download_dir                => OneAgent installer file download directory. Defaults are
 #                                    Linux/AIX : /tmp/
 #                                    Windows   : C:\\Windows\\Temp\\
-#
+#   * proxy_server                => Proxy server to be used by the curl, if required e.g.: https://example.com:8080
 #   * oneagent_params_hash        => Hash map of additional parameters to pass to the installer
 #   * Default OneAgent install parameters defined in params.pp as a hash map: 'INFRA_ONLY=0', 'APP_LOG_CONTENT_ACCESS=1'
 #   Additional OneAgent install parameters should be defined as follows (will override default params):
@@ -58,6 +58,7 @@ class dynatraceoneagent (
   String $default_install_dir            = $dynatraceoneagent::params::default_install_dir,
   Hash $oneagent_params_hash             = $dynatraceoneagent::params::oneagent_params_hash,
   Boolean $reboot_system                 = $dynatraceoneagent::params::reboot_system,
+  String $proxy_server                   = undef,
 
 # OneAgent Host Configuration Parameters
 
