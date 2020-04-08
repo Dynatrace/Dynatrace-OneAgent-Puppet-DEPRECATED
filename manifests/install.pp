@@ -20,6 +20,7 @@ class dynatraceoneagent::install {
   $oneagent_params_hash     = $dynatraceoneagent::oneagent_params_hash
   $reboot_system            = $dynatraceoneagent::reboot_system
   $service_name             = $dynatraceoneagent::service_name
+  $proxy_server             = $dynatraceoneagent::proxy_server
 
   file{ $download_dir:
     ensure => directory
@@ -31,6 +32,7 @@ class dynatraceoneagent::install {
     source         => $download_link,
     path           => $download_path,
     allow_insecure => true,
+    proxy_server   => $proxy_server,
     require        => File[$download_dir],
     creates        => $created_dir,
   }
