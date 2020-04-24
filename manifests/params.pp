@@ -12,6 +12,7 @@ class dynatraceoneagent::params {
     $version            = 'latest'
     $arch               = 'all'
     $installer_type     = 'default'
+    $proxy_server       = undef
 
     # OneAgent Install Parameters
     $oneagent_params_hash = {
