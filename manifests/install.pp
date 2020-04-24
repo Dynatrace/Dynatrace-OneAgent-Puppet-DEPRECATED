@@ -14,6 +14,7 @@ class dynatraceoneagent::install {
   $download_dir             = $dynatraceoneagent::download_dir
   $filename                 = $dynatraceoneagent::filename
   $download_path            = $dynatraceoneagent::download_path
+  $proxy_server             = $dynatraceoneagent::proxy_server
   $command                  = $dynatraceoneagent::command
   $download_link            = $dynatraceoneagent::download_link
   $provider                 = $dynatraceoneagent::provider
@@ -33,6 +34,7 @@ class dynatraceoneagent::install {
     allow_insecure => true,
     require        => File[$download_dir],
     creates        => $created_dir,
+    proxy_server   => $proxy_server,
   }
 
   if ($::kernel == 'Linux') or ($::osfamily  == 'AIX') {

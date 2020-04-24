@@ -60,6 +60,14 @@ The type of the installer
 
 Default value: default
 
+#### `proxy_server` - optional
+
+Data Type: `String`
+
+Proxy server to be used by the archive module for downloading the OneAgent installer if needed
+
+Default value: undef
+
 #### `download_dir` - optional
 
 Data Type: `String`

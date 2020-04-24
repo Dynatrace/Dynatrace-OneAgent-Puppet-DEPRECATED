@@ -12,6 +12,8 @@
 #   * $version                    => The required version of the OneAgent in 1.155.275.20181112-084458 format - default is latest
 #   * $arch                       => The architecture of your OS - default is all
 #   * $installer_type             => The type of the installer - default is default
+#   * $proxy_server               => Proxy server to be used by the archive module for downloading the OneAgent installer if needed
+#                                    - default is undef
 #
 #   Parameters for the OneAgent Installer:
 #   * download_dir                => OneAgent installer file download directory. Defaults are

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.2.0
+
+### Features
+
+- Add proxy server resource for archive module
+
+### Bugfixes
+
+TBD
+
+### Known Issues
+
+TBD
+
 ## Release 1.1.0
 
 ### Features
