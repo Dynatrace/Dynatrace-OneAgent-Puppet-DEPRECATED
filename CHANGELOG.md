@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.4.0
+
+### Features
+
+TBD
+
+### Bugfixes
+
+- Make proxy_server param optional
+
+### Known Issues
+
+TBD
+
 ## Release 1.3.0
 
 ### Features
