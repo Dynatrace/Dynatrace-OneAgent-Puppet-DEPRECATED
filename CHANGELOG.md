@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.3.0
+
+### Features
+
+TBD
+
+### Bugfixes
+
+- Add proxy_server var to init.pp
+
+### Known Issues
+
+TBD
+
 ## Release 1.2.0
 
 ### Features

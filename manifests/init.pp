@@ -53,7 +53,7 @@ class dynatraceoneagent (
   String $installer_type                = $dynatraceoneagent::params::installer_type,
   String $os_type                       = $dynatraceoneagent::params::os_type,
   Optional[String] $proxy_server                  = $dynatraceoneagent::params::proxy_server,
-
+  
 # OneAgent Install Parameters
   String $download_dir                   = $dynatraceoneagent::params::download_dir,
   String $service_name                   = $dynatraceoneagent::params::service_name,
