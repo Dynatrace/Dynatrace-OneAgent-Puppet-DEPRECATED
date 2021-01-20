@@ -4,50 +4,333 @@
 #
 class dynatraceoneagent::config {
 
-  $host_tags                      = $dynatraceoneagent::host_tags
-  $host_metadata                  = $dynatraceoneagent::host_metadata
-  $hostname                       = $dynatraceoneagent::hostname
-  $hostautotag_config_file        = $dynatraceoneagent::hostautotag_config_file
-  $hostmetadata_config_file       = $dynatraceoneagent::hostmetadata_config_file
-  $hostname_config_file           = $dynatraceoneagent::hostname_config_file
+  $global_owner                   = $dynatraceoneagent::global_owner
+  $global_group                   = $dynatraceoneagent::global_group
+  $global_mode                    = $dynatraceoneagent::global_mode
   $service_name                   = $dynatraceoneagent::service_name
+  $provider                       = $dynatraceoneagent::provider
+  $install_dir                    = $dynatraceoneagent::install_dir
+  $package_state                  = $dynatraceoneagent::package_state
+  $service_state                  = $dynatraceoneagent::service_state
 
-  if $host_tags {
-    file { $hostautotag_config_file:
-      ensure  => present,
-      content => $host_tags,
-    }
-  }
-  else {
-    file { $hostautotag_config_file:
-      ensure  => present,
-      content => '',
-    }
+# OneAgent Host Configuration Parameters
+  $oneagent_tools_dir                  = $dynatraceoneagent::oneagent_tools_dir
+  $oneagent_ctl                        = $dynatraceoneagent::oneagent_ctl
+  $oneagent_communication_hash         = $dynatraceoneagent::oneagent_communication_hash
+  $log_monitoring                      = $dynatraceoneagent::log_monitoring
+  $log_access                          = $dynatraceoneagent::log_access
+  $host_group                          = $dynatraceoneagent::host_group
+  $host_tags                           = $dynatraceoneagent::host_tags
+  $host_metadata                       = $dynatraceoneagent::host_metadata
+  $hostname                            = $dynatraceoneagent::hostname
+  $infra_only                          = $dynatraceoneagent::infra_only
+  $network_zone                        = $dynatraceoneagent::network_zone
+  $oneagent_puppet_conf_dir            = $dynatraceoneagent::oneagent_puppet_conf_dir
+  $oneagent_comms_config_file          = $dynatraceoneagent::oneagent_comms_config_file
+  $oneagent_logmonitoring_config_file  = $dynatraceoneagent::oneagent_logmonitoring_config_file
+  $oneagent_logaccess_config_file      = $dynatraceoneagent::oneagent_logaccess_config_file
+  $hostgroup_config_file               = $dynatraceoneagent::hostgroup_config_file
+  $hostautotag_config_file             = $dynatraceoneagent::hostautotag_config_file
+  $hostmetadata_config_file            = $dynatraceoneagent::hostmetadata_config_file
+  $hostname_config_file                = $dynatraceoneagent::hostname_config_file
+  $oneagent_infraonly_config_file      = $dynatraceoneagent::oneagent_infraonly_config_file
+  $oneagent_networkzone_config_file    = $dynatraceoneagent::oneagent_networkzone_config_file
+
+  if ($package_state == 'absent') and ($::kernel == 'Linux') or ($::osfamily == 'AIX') {
+      exec { 'uninstall_oneagent':
+        command   => "${install_dir}/agent/uninstall.sh",
+        cwd       => "${install_dir}/agent",
+        timeout   => 6000,
+        provider  => $provider,
+        logoutput => on_failure,
+      }
   }
 
-  if $host_metadata {
-    file { $hostmetadata_config_file:
-      ensure  => present,
-      content => $host_metadata,
-    }
-  }
-  else {
-    file { $hostmetadata_config_file:
-      ensure  => absent,
-    }
+  file { $oneagent_puppet_conf_dir :
+    ensure => 'directory'
   }
 
-  if $hostname {
-    file { $hostname_config_file:
-      ensure  => present,
-      content => $hostname,
-      notify  => Service[$service_name],
+  #if ($package_state != 'absent') or ($service_state != 'stopped') {
+  if ($package_state != 'absent') {
+
+    $oneagent_set_host_tags_array        = $host_tags.map |$value| { "--set-host-tag=${value}" }
+    $oneagent_set_host_tags_params       = join($oneagent_set_host_tags_array, ' ' )
+    $oneagent_set_host_metadata_array    = $host_metadata.map |$value| { "--set-host-property=${value}" }
+    $oneagent_set_host_metadata_params   = join($oneagent_set_host_metadata_array, ' ' )
+    $oneagent_communication_array        = $oneagent_communication_hash.map |$key,$value| { "${key}=${value}" }
+    $oneagent_communication_params       = join($oneagent_communication_array, ' ' )
+
+    if ($::kernel == 'Linux') or ($::osfamily == 'AIX') {
+      $oneagentctl_exec_path                 = ['/usr/bin/', $oneagent_tools_dir]
+      $oneagent_set_host_tags_command        = "${oneagent_ctl} --get-host-tags | xargs -I{} ${oneagent_ctl} --remove-host-tag={}; ${oneagent_ctl} ${oneagent_set_host_tags_params}"
+      $oneagent_remove_host_tags_command     = "${oneagent_ctl} --get-host-tags | xargs -I{} ${oneagent_ctl} --remove-host-tag={}"
+      $oneagent_set_host_metadata_command    = "${oneagent_ctl} --get-host-properties | xargs -I{} ${oneagent_ctl} --remove-host-property={}; ${oneagent_ctl} ${oneagent_set_host_metadata_params}"
+      $oneagent_remove_host_metadata_command = "${oneagent_ctl} --get-host-properties | xargs -I{} ${oneagent_ctl} --remove-host-property={}"
     }
-  }
-  else {
-    file { $hostname_config_file:
-      ensure => absent,
-      notify => Service[$service_name],
+    elsif $::osfamily == 'Windows'{
+      $oneagentctl_exec_path                 = [$dynatraceoneagent::params::windows_pwsh, $oneagent_tools_dir]
+      $oneagent_set_host_tags_command        = "powershell ${oneagent_ctl} --get-host-tags | %{${oneagent_ctl} --remove-host-tag=\$_}; ${oneagent_ctl} ${oneagent_set_host_tags_params}"
+      $oneagent_remove_host_tags_command     = "powershell ${oneagent_ctl} --get-host-tags | %{${oneagent_ctl} --remove-host-tag=\$_}"
+      $oneagent_set_host_metadata_command    = "powershell ${oneagent_ctl} --get-host-properties | %{${oneagent_ctl} --remove-host-property=\$_}; ${oneagent_ctl} ${oneagent_set_host_metadata_params}"
+      $oneagent_remove_host_metadata_command = "powershell ${oneagent_ctl} --get-host-properties | %{${oneagent_ctl} --remove-host-property=\$_}"
+    }
+
+    if $oneagent_communication_array.length > 0 {
+      file { $oneagent_comms_config_file:
+        ensure  => present,
+        content => String($oneagent_communication_hash),
+        notify  => Exec['set_oneagent_communication'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $oneagent_comms_config_file:
+        ensure => absent,
+      }
+    }
+
+    if $log_monitoring != undef {
+      file { $oneagent_logmonitoring_config_file:
+        ensure  => present,
+        content => String($log_monitoring),
+        notify  => Exec['set_log_monitoring'],
+        mode    => $global_mode,
+      }
+    }
+
+    if $log_access != undef {
+      file { $oneagent_logaccess_config_file:
+        ensure  => present,
+        content => String($log_access),
+        notify  => Exec['set_log_access'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $oneagent_logaccess_config_file:
+        ensure => absent,
+      }
+    }
+
+    if $host_group {
+      file { $hostgroup_config_file:
+        ensure  => present,
+        content => $host_group,
+        notify  => Exec['set_host_group'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $hostgroup_config_file:
+        ensure => absent,
+        notify => Exec['unset_host_group'],
+      }
+    }
+
+    if $host_tags.length > 0 {
+      file { $hostautotag_config_file:
+        ensure  => present,
+        content => $host_tags,
+        notify  => Exec['set_host_tags'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $hostautotag_config_file:
+        ensure => absent,
+        notify => Exec['unset_host_tags'],
+      }
+    }
+
+    if $host_metadata.length > 0 {
+      file { $hostmetadata_config_file:
+        ensure  => present,
+        content => $host_tags,
+        notify  => Exec['set_host_metadata'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $hostmetadata_config_file:
+        ensure => absent,
+        notify => Exec['unset_host_metadata'],
+      }
+    }
+
+    if $hostname {
+      file { $hostname_config_file:
+        ensure  => present,
+        content => $host_tags,
+        notify  => Exec['set_hostname'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $hostname_config_file:
+        ensure => absent,
+        notify => Exec['unset_hostname'],
+      }
+    }
+
+    if $infra_only != undef {
+      file { $oneagent_infraonly_config_file:
+        ensure  => present,
+        content => String($infra_only),
+        notify  => Exec['set_infra_only'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $oneagent_infraonly_config_file:
+        ensure => absent,
+      }
+    }
+
+    if $network_zone {
+      file { $oneagent_networkzone_config_file:
+        ensure  => present,
+        content => $network_zone,
+        notify  => Exec['set_network_zone'],
+        mode    => $global_mode,
+      }
+    } else {
+      file { $oneagent_networkzone_config_file:
+        ensure => absent,
+        notify => Exec['unset_network_zone'],
+      }
+    }
+
+    exec { 'set_oneagent_communication':
+        command     => "${oneagent_ctl} ${oneagent_communication_params} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_log_monitoring':
+        command     => "${oneagent_ctl} --set-app-log-content-access=${log_monitoring} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_log_access':
+        command     => "${oneagent_ctl} --set-system-logs-access-enabled=${log_access} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_host_group':
+        command     => "${oneagent_ctl} --set-host-group=${host_group} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'unset_host_group':
+        command     => "${oneagent_ctl} --set-host-group= --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_host_tags':
+        command     => $oneagent_set_host_tags_command,
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'unset_host_tags':
+        command     => $oneagent_remove_host_tags_command,
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_host_metadata':
+        command     => $oneagent_set_host_metadata_command,
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'unset_host_metadata':
+        command     => $oneagent_remove_host_metadata_command,
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_hostname':
+        command     => "${oneagent_ctl} --set-host-name=${hostname} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'unset_hostname':
+        command     => "${oneagent_ctl} --set-host-name=\"\" --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_infra_only':
+        command     => "${oneagent_ctl} --set-infra-only=${infra_only} --restart-service",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'set_network_zone':
+        command     => "${oneagent_ctl} --set-network-zone=${network_zone}",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
+    }
+
+    exec { 'unset_network_zone':
+        command     => "${oneagent_ctl} --set-network-zone=\"\"",
+        path        => $oneagentctl_exec_path,
+        cwd         => $oneagent_tools_dir,
+        timeout     => 6000,
+        provider    => $provider,
+        logoutput   => on_failure,
+        refreshonly => true,
     }
   }
 
