@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.5.0
+
+### Features
+
+ - Add oneagentctl support
+ - Add option to verify OneAgent Linux/AIX installer file signature
+ - OneAgent service state can now be set using the `service_state` parameter
+ - OneAgent package state can now be set using the `package_state` parameter
+ - Use `reboot` module for both linux and windows reboots
+ - Convert `host_metadata` string parameter to array
+ - Convert `host_tags` string parameter to array
+ - Following best practice, OneAgent metadata including host tags, host metadata and hostname is now set via `oneagentclt` instead of configuration files.
+ - Add `download` class to separately handle OneAgent binary download
+ - Add windows fact `dynatrace_oneagent_appdata`
+ - Add windows fact `dynatrace_oneagent_programfiles`
+- Add acceptance tests using the Litmus test framework
+
+### Bugfixes
+
+ - Remove `ensure => present` from `file{ $download_path:}` resource to ensure no file is present if OneAgent installer download fails.
+ - data/common.yaml file now has valid yaml
+
+### Known Issues
+
+TBD
+
 ## Release 1.4.0
 
 ### Features

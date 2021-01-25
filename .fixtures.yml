@@ -2,5 +2,14 @@
 # See https://github.com/puppetlabs/puppetlabs_spec_helper#using-fixtures for details
 ---
 fixtures:
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+    provision: 'https://github.com/puppetlabs/provision.git'
   forge_modules:
-#     stdlib: "puppetlabs/stdlib"
+    archive:
+      repo: "puppet/archive"
+      ref: "4.6.0"
+    reboot:
+      repo: "puppetlabs/reboot"
+      ref: "3.2.0"
