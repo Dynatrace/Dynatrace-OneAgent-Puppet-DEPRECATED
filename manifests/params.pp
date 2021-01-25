@@ -1,7 +1,5 @@
-# Class: dynatraceoneagent::params
-#
-#
-# Dynatrace OneAgent default download and install settings according to operating system
+# @summary
+#   This class manages the OneAgent parameters
 #
 class dynatraceoneagent::params {
 

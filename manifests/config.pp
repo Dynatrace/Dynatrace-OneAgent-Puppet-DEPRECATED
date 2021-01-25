@@ -1,21 +1,21 @@
-# Class: dynatraceoneagent::config:  See README.md for documentation.
-# ===========================
-#
+# @summary
+#   This class manages the configuration of the OneAgent
 #
 class dynatraceoneagent::config {
 
-  $global_owner                   = $dynatraceoneagent::global_owner
-  $global_group                   = $dynatraceoneagent::global_group
-  $global_mode                    = $dynatraceoneagent::global_mode
-  $service_name                   = $dynatraceoneagent::service_name
-  $provider                       = $dynatraceoneagent::provider
-  $install_dir                    = $dynatraceoneagent::install_dir
-  $package_state                  = $dynatraceoneagent::package_state
-  $service_state                  = $dynatraceoneagent::service_state
+  $global_owner                        = $dynatraceoneagent::global_owner
+  $global_group                        = $dynatraceoneagent::global_group
+  $global_mode                         = $dynatraceoneagent::global_mode
+  $service_name                        = $dynatraceoneagent::service_name
+  $provider                            = $dynatraceoneagent::provider
+  $install_dir                         = $dynatraceoneagent::install_dir
+  $created_dir                         = $dynatraceoneagent::created_dir
+  $package_state                       = $dynatraceoneagent::package_state
+  $service_state                       = $dynatraceoneagent::service_state
 
 # OneAgent Host Configuration Parameters
   $oneagent_tools_dir                  = $dynatraceoneagent::oneagent_tools_dir
-  $oneagent_ctl                        = $dynatraceoneagent::oneagent_ctl
+  $oactl                               = $dynatraceoneagent::oneagent_ctl
   $oneagent_communication_hash         = $dynatraceoneagent::oneagent_communication_hash
   $log_monitoring                      = $dynatraceoneagent::log_monitoring
   $log_access                          = $dynatraceoneagent::log_access
@@ -39,19 +39,18 @@ class dynatraceoneagent::config {
   if ($package_state == 'absent') and ($::kernel == 'Linux') or ($::osfamily == 'AIX') {
       exec { 'uninstall_oneagent':
         command   => "${install_dir}/agent/uninstall.sh",
-        cwd       => "${install_dir}/agent",
         timeout   => 6000,
         provider  => $provider,
         logoutput => on_failure,
+        onlyif    => "test -f ${created_dir}"
       }
   }
 
-  file { $oneagent_puppet_conf_dir :
-    ensure => 'directory'
-  }
+  if ($package_state != 'absent') and ($service_state != 'stopped') {
 
-  #if ($package_state != 'absent') or ($service_state != 'stopped') {
-  if ($package_state != 'absent') {
+    file { $oneagent_puppet_conf_dir :
+      ensure  => 'directory',
+    }
 
     $oneagent_set_host_tags_array        = $host_tags.map |$value| { "--set-host-tag=${value}" }
     $oneagent_set_host_tags_params       = join($oneagent_set_host_tags_array, ' ' )
@@ -62,17 +61,17 @@ class dynatraceoneagent::config {
 
     if ($::kernel == 'Linux') or ($::osfamily == 'AIX') {
       $oneagentctl_exec_path                 = ['/usr/bin/', $oneagent_tools_dir]
-      $oneagent_set_host_tags_command        = "${oneagent_ctl} --get-host-tags | xargs -I{} ${oneagent_ctl} --remove-host-tag={}; ${oneagent_ctl} ${oneagent_set_host_tags_params}"
-      $oneagent_remove_host_tags_command     = "${oneagent_ctl} --get-host-tags | xargs -I{} ${oneagent_ctl} --remove-host-tag={}"
-      $oneagent_set_host_metadata_command    = "${oneagent_ctl} --get-host-properties | xargs -I{} ${oneagent_ctl} --remove-host-property={}; ${oneagent_ctl} ${oneagent_set_host_metadata_params}"
-      $oneagent_remove_host_metadata_command = "${oneagent_ctl} --get-host-properties | xargs -I{} ${oneagent_ctl} --remove-host-property={}"
+      $oneagent_remove_host_tags_command     = "${oactl} --get-host-tags | xargs -I{} ${oactl} --remove-host-tag={}"
+      $oneagent_set_host_tags_command        = "${oneagent_remove_host_tags_command}; ${oactl} ${oneagent_set_host_tags_params}"
+      $oneagent_remove_host_metadata_command = "${oactl} --get-host-properties | xargs -I{} ${oactl} --remove-host-property={}"
+      $oneagent_set_host_metadata_command    = "${oneagent_remove_host_metadata_command}; ${oactl} ${oneagent_set_host_metadata_params}"
     }
     elsif $::osfamily == 'Windows'{
       $oneagentctl_exec_path                 = [$dynatraceoneagent::params::windows_pwsh, $oneagent_tools_dir]
-      $oneagent_set_host_tags_command        = "powershell ${oneagent_ctl} --get-host-tags | %{${oneagent_ctl} --remove-host-tag=\$_}; ${oneagent_ctl} ${oneagent_set_host_tags_params}"
-      $oneagent_remove_host_tags_command     = "powershell ${oneagent_ctl} --get-host-tags | %{${oneagent_ctl} --remove-host-tag=\$_}"
-      $oneagent_set_host_metadata_command    = "powershell ${oneagent_ctl} --get-host-properties | %{${oneagent_ctl} --remove-host-property=\$_}; ${oneagent_ctl} ${oneagent_set_host_metadata_params}"
-      $oneagent_remove_host_metadata_command = "powershell ${oneagent_ctl} --get-host-properties | %{${oneagent_ctl} --remove-host-property=\$_}"
+      $oneagent_remove_host_tags_command     = "powershell ${oactl} --get-host-tags | %{${oactl} --remove-host-tag=\$_}"
+      $oneagent_set_host_tags_command        = "${oneagent_remove_host_tags_command}; ${oactl} ${oneagent_set_host_tags_params}"
+      $oneagent_remove_host_metadata_command = "powershell ${oactl} --get-host-properties | %{${oactl} --remove-host-property=\$_}"
+      $oneagent_set_host_metadata_command    = "${oneagent_remove_host_metadata_command}; ${oactl} ${oneagent_set_host_metadata_params}"
     }
 
     if $oneagent_communication_array.length > 0 {
@@ -94,6 +93,10 @@ class dynatraceoneagent::config {
         content => String($log_monitoring),
         notify  => Exec['set_log_monitoring'],
         mode    => $global_mode,
+      }
+    } else {
+      file { $oneagent_logmonitoring_config_file:
+        ensure => absent,
       }
     }
 
@@ -127,7 +130,7 @@ class dynatraceoneagent::config {
     if $host_tags.length > 0 {
       file { $hostautotag_config_file:
         ensure  => present,
-        content => $host_tags,
+        content => String($host_tags),
         notify  => Exec['set_host_tags'],
         mode    => $global_mode,
       }
@@ -141,7 +144,7 @@ class dynatraceoneagent::config {
     if $host_metadata.length > 0 {
       file { $hostmetadata_config_file:
         ensure  => present,
-        content => $host_tags,
+        content => String($host_metadata),
         notify  => Exec['set_host_metadata'],
         mode    => $global_mode,
       }
@@ -155,7 +158,7 @@ class dynatraceoneagent::config {
     if $hostname {
       file { $hostname_config_file:
         ensure  => present,
-        content => $host_tags,
+        content => $hostname,
         notify  => Exec['set_hostname'],
         mode    => $global_mode,
       }
@@ -194,7 +197,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_oneagent_communication':
-        command     => "${oneagent_ctl} ${oneagent_communication_params} --restart-service",
+        command     => "${oactl} ${oneagent_communication_params} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -204,7 +207,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_log_monitoring':
-        command     => "${oneagent_ctl} --set-app-log-content-access=${log_monitoring} --restart-service",
+        command     => "${oactl} --set-app-log-content-access=${log_monitoring} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -214,7 +217,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_log_access':
-        command     => "${oneagent_ctl} --set-system-logs-access-enabled=${log_access} --restart-service",
+        command     => "${oactl} --set-system-logs-access-enabled=${log_access} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -224,7 +227,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_host_group':
-        command     => "${oneagent_ctl} --set-host-group=${host_group} --restart-service",
+        command     => "${oactl} --set-host-group=${host_group} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -234,7 +237,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'unset_host_group':
-        command     => "${oneagent_ctl} --set-host-group= --restart-service",
+        command     => "${oactl} --set-host-group= --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -284,7 +287,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_hostname':
-        command     => "${oneagent_ctl} --set-host-name=${hostname} --restart-service",
+        command     => "${oactl} --set-host-name=${hostname} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -294,7 +297,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'unset_hostname':
-        command     => "${oneagent_ctl} --set-host-name=\"\" --restart-service",
+        command     => "${oactl} --set-host-name=\"\" --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -304,7 +307,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_infra_only':
-        command     => "${oneagent_ctl} --set-infra-only=${infra_only} --restart-service",
+        command     => "${oactl} --set-infra-only=${infra_only} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -314,7 +317,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_network_zone':
-        command     => "${oneagent_ctl} --set-network-zone=${network_zone}",
+        command     => "${oactl} --set-network-zone=${network_zone}",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -324,7 +327,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'unset_network_zone':
-        command     => "${oneagent_ctl} --set-network-zone=\"\"",
+        command     => "${oactl} --set-network-zone=\"\"",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,

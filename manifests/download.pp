@@ -1,6 +1,5 @@
-# Class: dynatraceoneagent::download:  See README.md for documentation.
-# ===========================
-#
+# @summary
+#   This class downloads the OneAgent installer binary
 #
 class dynatraceoneagent::download {
 
@@ -28,7 +27,7 @@ class dynatraceoneagent::download {
   $global_group             = $dynatraceoneagent::global_group
   $global_mode              = $dynatraceoneagent::global_mode
 
-  if $package_state != absent {
+  if $package_state != 'absent' {
     file{ $download_dir:
       ensure => directory
     }
@@ -42,17 +41,17 @@ class dynatraceoneagent::download {
       require        => File[$download_dir],
       creates        => $created_dir,
       proxy_server   => $proxy_server,
+      cleanup        => false,
     }
   }
 
-  if ($::kernel == 'Linux') or ($::osfamily  == 'AIX') and ($package_state != absent) {
+  if $package_state != 'absent' {
     file{ $download_path:
-      ensure => present,
       mode   => '0755',
     }
   }
 
-  if ($dynatraceoneagent::verify_signature) and ($package_state != absent) and ($::kernel == 'Linux') or ($::osfamily  == 'AIX') {
+  if ($dynatraceoneagent::verify_signature) and ($package_state != 'absent') and ($::kernel == 'Linux') {
 
     archive{ $dynatraceoneagent::cert_file_name:
       ensure         => present,
@@ -63,6 +62,7 @@ class dynatraceoneagent::download {
       require        => File[$download_dir],
       creates        => $dynatraceoneagent::cert_file_name,
       proxy_server   => $proxy_server,
+      cleanup        => false,
     }
 
     file{ $dynatraceoneagent::dt_root_cert:
@@ -70,7 +70,9 @@ class dynatraceoneagent::download {
       mode   => $global_mode,
     }
 
-    $verify_signature_command = "( echo 'Content-Type: multipart/signed; protocol=\"application/x-pkcs7-signature\"; micalg=\"sha-256\"; boundary=\"--SIGNED-INSTALLER\"'; echo ; echo ; echo '----SIGNED-INSTALLER' ; cat ${download_path} ) | openssl cms -verify -CAfile ${dynatraceoneagent::dt_root_cert} > /dev/null"
+    $verify_signature_command = "( echo 'Content-Type: multipart/signed; protocol=\"application/x-pkcs7-signature\"; micalg=\"sha-256\";\
+     boundary=\"--SIGNED-INSTALLER\"'; echo ; echo ; echo '----SIGNED-INSTALLER' ; \
+     cat ${download_path} ) | openssl cms -verify -CAfile ${dynatraceoneagent::dt_root_cert} > /dev/null"
 
     exec { 'delete_oneagent_installer_script':
         command   => "rm ${$download_path}",
@@ -80,7 +82,7 @@ class dynatraceoneagent::download {
         logoutput => on_failure,
         unless    => $verify_signature_command,
         require   => File[$dynatraceoneagent::dt_root_cert, $download_path],
-        subscribe => Archive[$dynatraceoneagent::cert_file_name],
+        creates   => $created_dir,
     }
   }
 }

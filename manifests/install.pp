@@ -1,6 +1,5 @@
-# Class: dynatraceoneagent::install:  See README.md for documentation.
-# ===========================
-#
+# @summary
+#   This class manages the installation of the OneAgent on the host
 #
 class dynatraceoneagent::install {
 
@@ -15,7 +14,7 @@ class dynatraceoneagent::install {
   $package_state            = $dynatraceoneagent::package_state
   $oneagent_puppet_conf_dir = $dynatraceoneagent::oneagent_puppet_conf_dir
 
-  if ($::kernel == 'Linux') or ($::osfamily  == 'AIX') and ($package_state != absent) {
+  if ($::kernel == 'Linux') and ($package_state != 'absent') {
     exec { 'install_oneagent':
         command   => $dynatraceoneagent::command,
         cwd       => $download_dir,
@@ -23,7 +22,6 @@ class dynatraceoneagent::install {
         creates   => $created_dir,
         provider  => $provider,
         logoutput => on_failure,
-        before    => File[$oneagent_puppet_conf_dir],
     }
   }
 
@@ -33,20 +31,17 @@ class dynatraceoneagent::install {
       provider        => $provider,
       source          => $download_path,
       install_options => [$oneagent_params_hash, '--quiet'],
-      before          => File[$oneagent_puppet_conf_dir],
     }
   }
 
-  if ($reboot_system) and ($::osfamily == 'Windows') {
+  if ($reboot_system) and ($::osfamily == 'Windows') and ($package_state != 'absent') {
     reboot { 'after':
       subscribe => Package[$service_name],
     }
-  } elsif ($reboot_system) and ($::kernel == 'Linux') or ($::osfamily  == 'AIX') {
-      exec { 'reboot':
-        command     => '/sbin/reboot',
-        refreshonly => true,
-        subscribe   => Exec['install_oneagent'],
-    }
+  } elsif ($::kernel == 'Linux') and ($reboot_system) and ($package_state != 'absent') {
+      reboot { 'after':
+        subscribe => Exec['install_oneagent'],
+      }
   }
 
 }

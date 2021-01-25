@@ -1,6 +1,5 @@
-# Class: dynatraceoneagent::service:  See README.md for documentation.
-# ===========================
-#
+# @summary
+#   Manages the OneAgent service
 #
 class dynatraceoneagent::service {
 
