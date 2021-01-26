@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.6.0
+
+### Features
+
+ - Use shell (`/bin/sh`) to run OneAgent install script on Linux and AIX systems
+ - Remove resource `file{ $download_path:}` as it is not needed anymore with the addition of shell to the install OneAgent command
+
+### Bugfixes
+
+ - Fixed if statements with missing or with wrong conditions that checked for the AIX/Linux Operating System from the host facts.
+
+### Known Issues
+
+TBD
+
 ## Release 1.5.0
 
 ### Features

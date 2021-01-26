@@ -1,6 +1,6 @@
 ---
   vagrant:
     provisioner: vagrant
-    images: ['generic/ubuntu1804', 'generic/ubuntu2004', 'generic/debian9', 'centos/7', 'gusztavvargadr/windows-server']
+    images: ['generic/ubuntu1804', 'generic/ubuntu2004', 'generic/debian9', 'gusztavvargadr/windows-server']
     params:
       vagrant_provider: virtualbox
