@@ -36,7 +36,7 @@ class dynatraceoneagent::config {
   $oneagent_infraonly_config_file      = $dynatraceoneagent::oneagent_infraonly_config_file
   $oneagent_networkzone_config_file    = $dynatraceoneagent::oneagent_networkzone_config_file
 
-  if ($package_state == 'absent') and ($::kernel == 'Linux') or ($::osfamily == 'AIX') {
+  if ($package_state == 'absent') and ($::kernel == 'Linux' or $::osfamily == 'AIX') {
       exec { 'uninstall_oneagent':
         command   => "${install_dir}/agent/uninstall.sh",
         timeout   => 6000,
