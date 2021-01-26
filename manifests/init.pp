@@ -178,7 +178,7 @@ class dynatraceoneagent (
       $dt_root_cert             = "${download_dir}/${cert_file_name}"
       $oneagent_params_array    = $oneagent_params_hash.map |$key,$value| { "${key}=${value}" }
       $oneagent_unix_params     = join($oneagent_params_array, ' ' )
-      $command                  = "${download_path} ${oneagent_unix_params}"
+      $command                  = "/bin/sh ${download_path} ${oneagent_unix_params}"
       $created_dir              = "${install_dir}/agent/agent.state"
       $oneagent_tools_dir       = "${$install_dir}/agent/tools"
     }
