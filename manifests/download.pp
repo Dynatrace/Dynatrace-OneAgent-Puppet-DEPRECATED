@@ -45,13 +45,7 @@ class dynatraceoneagent::download {
     }
   }
 
-  if $package_state != 'absent' {
-    file{ $download_path:
-      mode   => '0755',
-    }
-  }
-
-  if ($dynatraceoneagent::verify_signature) and ($package_state != 'absent') and ($::kernel == 'Linux') {
+  if ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($dynatraceoneagent::verify_signature) and ($package_state != 'absent'){
 
     archive{ $dynatraceoneagent::cert_file_name:
       ensure         => present,
@@ -81,7 +75,10 @@ class dynatraceoneagent::download {
         provider  => $provider,
         logoutput => on_failure,
         unless    => $verify_signature_command,
-        require   => File[$dynatraceoneagent::dt_root_cert, $download_path],
+        require   => [
+            File[$dynatraceoneagent::dt_root_cert],
+            Archive[$filename],
+        ],
         creates   => $created_dir,
     }
   }
