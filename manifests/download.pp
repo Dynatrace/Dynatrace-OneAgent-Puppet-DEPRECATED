@@ -15,6 +15,7 @@ class dynatraceoneagent::download {
   $download_path            = $dynatraceoneagent::download_path
   $proxy_server             = $dynatraceoneagent::proxy_server
   $allow_insecure           = $dynatraceoneagent::allow_insecure
+  $download_options         = $dynatraceoneagent::download_options
   $download_link            = $dynatraceoneagent::download_link
   $download_cert_link       = $dynatraceoneagent::download_cert_link
   $cert_file_name           = $dynatraceoneagent::cert_file_name
@@ -48,15 +49,16 @@ class dynatraceoneagent::download {
   if ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($dynatraceoneagent::verify_signature) and ($package_state != 'absent'){
 
     archive{ $dynatraceoneagent::cert_file_name:
-      ensure         => present,
-      extract        => false,
-      source         => $download_cert_link,
-      path           => $dynatraceoneagent::dt_root_cert,
-      allow_insecure => $allow_insecure,
-      require        => File[$download_dir],
-      creates        => $dynatraceoneagent::cert_file_name,
-      proxy_server   => $proxy_server,
-      cleanup        => false,
+      ensure           => present,
+      extract          => false,
+      source           => $download_cert_link,
+      path             => $dynatraceoneagent::dt_root_cert,
+      allow_insecure   => $allow_insecure,
+      require          => File[$download_dir],
+      creates          => $dynatraceoneagent::cert_file_name,
+      proxy_server     => $proxy_server,
+      cleanup          => false,
+      download_options => $download_options
     }
 
     file{ $dynatraceoneagent::dt_root_cert:

@@ -15,6 +15,7 @@ class dynatraceoneagent::params {
     $proxy_server       = undef
     $allow_insecure     = false
     $verify_signature   = false
+    $download_options   = undef
     $download_cert_link = 'https://ca.dynatrace.com/dt-root.cert.pem'
     $cert_file_name     = 'dt-root.cert.pem'
 
