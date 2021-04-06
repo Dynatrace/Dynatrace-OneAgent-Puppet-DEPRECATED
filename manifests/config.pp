@@ -317,7 +317,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'set_network_zone':
-        command     => "${oactl} --set-network-zone=${network_zone}",
+        command     => "${oactl} --set-network-zone=${network_zone} --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
@@ -327,7 +327,7 @@ class dynatraceoneagent::config {
     }
 
     exec { 'unset_network_zone':
-        command     => "${oactl} --set-network-zone=\"\"",
+        command     => "${oactl} --set-network-zone=\"\" --restart-service",
         path        => $oneagentctl_exec_path,
         cwd         => $oneagent_tools_dir,
         timeout     => 6000,
