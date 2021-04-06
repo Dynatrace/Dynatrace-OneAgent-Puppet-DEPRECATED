@@ -58,7 +58,7 @@ class dynatraceoneagent::download {
       creates          => $dynatraceoneagent::cert_file_name,
       proxy_server     => $proxy_server,
       cleanup          => false,
-      download_options => $download_options
+      download_options => $download_options,
     }
 
     file{ $dynatraceoneagent::dt_root_cert:
