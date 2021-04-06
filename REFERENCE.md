@@ -133,6 +133,15 @@ Ignore HTTPS certificate errors when using the archive module.
 
 Default value: $dynatraceoneagent::params::allow_insecure
 
+##### `download_options`
+
+Data type: `Optional`
+
+In some cases you may need custom flags for curl/wget/s3 which can be supplied via download_options.
+Refer to [Download Customizations](https://github.com/voxpupuli/puppet-archive#download-customizations)
+
+Default value: $dynatraceoneagent::params::download_options
+
 ##### `download_dir`
 
 Data type: `String`
@@ -384,3 +393,4 @@ This class manages the OneAgent parameters
 ### dynatraceoneagent::service
 
 Manages the OneAgent service
+

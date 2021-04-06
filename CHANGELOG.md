@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.7.0
+
+### Features
+
+ - Add download_options parameter on Archive resource in case custom flags are needed for curl/wget/s3 when downloading the OneAgent installer
+
+### Bugfixes
+
+ - Added `--restart-service` parameter to `oneagentctl --set-network-zone` command
+
+### Known Issues
+
+TBD
+
 ## Release 1.6.0
 
 ### Features

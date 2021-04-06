@@ -34,6 +34,9 @@
 #   Name of the downloaded cert file
 # @param allow_insecure
 #   Ignore HTTPS certificate errors when using the archive module.
+# @param download_options
+#   In some cases you may need custom flags for curl/wget/s3 which can be supplied via download_options.
+#   Refer to [Download Customizations](https://github.com/voxpupuli/puppet-archive#download-customizations)
 # @param download_dir
 #   OneAgent installer file download directory.
 # @param default_install_dir
@@ -114,6 +117,7 @@ class dynatraceoneagent (
   Optional[String] $download_cert_link  = $dynatraceoneagent::params::download_cert_link,
   Optional[String] $cert_file_name      = $dynatraceoneagent::params::cert_file_name,
   Optional[Boolean] $allow_insecure     = $dynatraceoneagent::params::allow_insecure,
+  Optional $download_options            = $dynatraceoneagent::params::download_options,
 
 # OneAgent Install Parameters
   String $download_dir                   = $dynatraceoneagent::params::download_dir,
