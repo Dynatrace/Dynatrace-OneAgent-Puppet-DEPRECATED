@@ -36,17 +36,7 @@ class dynatraceoneagent::config {
   $oneagent_infraonly_config_file      = $dynatraceoneagent::oneagent_infraonly_config_file
   $oneagent_networkzone_config_file    = $dynatraceoneagent::oneagent_networkzone_config_file
 
-  if ($package_state == 'absent') and ($::kernel == 'Linux' or $::osfamily == 'AIX') {
-      exec { 'uninstall_oneagent':
-        command   => "${install_dir}/agent/uninstall.sh",
-        timeout   => 6000,
-        provider  => $provider,
-        logoutput => on_failure,
-        onlyif    => "test -f ${created_dir}"
-      }
-  }
-
-  if ($package_state != 'absent') and ($service_state != 'stopped') {
+  #if ($service_state != 'stopped') {
 
     file { $oneagent_puppet_conf_dir :
       ensure  => 'directory',
@@ -335,6 +325,6 @@ class dynatraceoneagent::config {
         logoutput   => on_failure,
         refreshonly => true,
     }
-  }
+  #}
 
 }

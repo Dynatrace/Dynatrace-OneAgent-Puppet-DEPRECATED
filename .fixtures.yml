@@ -4,8 +4,9 @@
 fixtures:
   repositories:
     facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
-    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
     provision: 'https://github.com/puppetlabs/provision.git'
+    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
   forge_modules:
     archive:
       repo: "puppet/archive"
@@ -13,3 +14,8 @@ fixtures:
     reboot:
       repo: "puppetlabs/reboot"
       ref: "3.2.0"
+    powershell:
+      repo: "puppetlabs/powershell"
+      ref: "5.0.0"
+  symlinks:
+    dynatraceoneagent: "#{source_dir}"
