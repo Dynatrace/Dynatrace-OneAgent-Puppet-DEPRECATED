@@ -4,10 +4,10 @@ describe 'dynatraceoneagent class windows', if: os[:family] == 'windows' do
   context 'default parameters in apply' do
     it 'runs successfully' do
       pp = <<-PUPPETCODE
-      class { 'dynatraceoneagent':
+        class { 'dynatraceoneagent':
           tenant_url  => 'https://{your-environment-id}.live.dynatrace.com',
           paas_token  => '{your-paas-token}',
-      }
+        }
       PUPPETCODE
       # Run it twice and test for idempotency
       apply_manifest(pp, catch_failures: true)
