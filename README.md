@@ -32,7 +32,7 @@ This module deploys the [Dynatrace OneAgent] on Linux, Windows and AIX Operating
 
 This module requires [puppet/archive] as well as [puppet-labs/reboot] for server restarts.
 
-For uninstalling the OneAgent on windows, the [puppetlabs-powershell] module is required.
+For uninstalling the OneAgent on Windows, the [puppetlabs-powershell] module is required.
 
 To begin using this module, use the Puppet Module Tool (PMT) from the command line to install this module:
 
@@ -123,8 +123,7 @@ class { 'dynatraceoneagent':
 }
 ```
 
-For Windows, directory paths require 2 backslashes.
-For further information on how to handle file paths on Windows, visit [Handling file paths on Windows]
+For further information on how to handle file paths on Windows, visit [Files and paths on Windows]
 
 ### Set or update OneAgent configuration and host metadata
 
@@ -192,7 +191,7 @@ An example script for running acceptance tests can be found on the [run_acc_test
 [Deployment API]: https://www.dynatrace.com/support/help/extend-dynatrace/dynatrace-api/environment-api/deployment/
 [Dynatrace Supported Operating Systems]:https://www.dynatrace.com/support/help/technology-support/operating-systems/
 [Deployment API - GET available versions of OneAgent]: https://www.dynatrace.com/support/help/extend-dynatrace/dynatrace-api/environment-api/deployment/oneagent/get-available-versions/
-[Handling file paths on Windows]: https://puppet.com/docs/puppet/4.10/lang_windows_file_paths.html
+[Files and paths on Windows]: https://puppet.com/docs/puppet/6/lang_windows_file_paths.html
 [oneagentctl]: https://www.dynatrace.com/support/help/setup-and-configuration/dynatrace-oneagent/oneagent-configuration-via-command-line-interface
 [metadata.json]: ./metadata.json
 [Technology Support]: https://www.dynatrace.com/support/help/technology-support/operating-systems/
