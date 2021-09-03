@@ -14,7 +14,7 @@ class dynatraceoneagent::install {
   $package_state            = $dynatraceoneagent::package_state
   $oneagent_puppet_conf_dir = $dynatraceoneagent::oneagent_puppet_conf_dir
 
-  if ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($package_state != 'absent') {
+  if ($::kernel == 'Linux' or $::osfamily  == 'AIX'){
     exec { 'install_oneagent':
         command   => $dynatraceoneagent::command,
         cwd       => $download_dir,
@@ -25,7 +25,7 @@ class dynatraceoneagent::install {
     }
   }
 
-  if ($::osfamily == 'Windows'){
+  if ($::osfamily == 'Windows') {
     package { $service_name:
       ensure          => $package_state,
       provider        => $provider,
@@ -34,11 +34,11 @@ class dynatraceoneagent::install {
     }
   }
 
-  if ($reboot_system) and ($::osfamily == 'Windows') and ($package_state != 'absent') {
+  if ($reboot_system) and ($::osfamily == 'Windows') {
     reboot { 'after':
       subscribe => Package[$service_name],
     }
-  } elsif ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($reboot_system) and ($package_state != 'absent') {
+  } elsif ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($reboot_system) {
       reboot { 'after':
         subscribe => Exec['install_oneagent'],
       }
