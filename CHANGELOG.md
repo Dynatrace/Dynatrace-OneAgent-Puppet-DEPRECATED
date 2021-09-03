@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.8.0
+
+### Features
+
+ - Simplified conditions by setting conditions on class containment on init.pp
+ - Move uninstall tasks to new `dynatraceoneagent::uninstall` class.
+
+### Bugfixes
+
+ - Dynatrace OneAgent Windows uninstalls now executed via PowerShell
+
+### Known Issues
+
+TBD
+
 ## Release 1.7.0
 
 ### Features
