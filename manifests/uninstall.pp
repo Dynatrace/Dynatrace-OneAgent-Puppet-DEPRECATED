@@ -3,9 +3,9 @@
 #
 class dynatraceoneagent::uninstall {
 
-  $provider                            = $dynatraceoneagent::provider
-  $install_dir                         = $dynatraceoneagent::install_dir
-  $created_dir                         = $dynatraceoneagent::created_dir
+  $provider    = $dynatraceoneagent::provider
+  $install_dir = $dynatraceoneagent::install_dir
+  $created_dir = $dynatraceoneagent::created_dir
 
   $created_dir_exists = find_file($created_dir)
 

@@ -9,7 +9,7 @@
 #    }
 #
 # @param global_mode
-#   Sets the permissions for any files that don't have 
+#   Sets the permissions for any files that don't have
 #   this assignment either set manually or by the OneAgent installer
 # @param tenant_url
 #   URL of your dynatrace Tenant
@@ -18,7 +18,7 @@
 #   Paas token for downloading the OneAgent installer
 # @param api_path
 #   Path of the Dynatrace OneAgent deployment API
-# @param version          
+# @param version
 #   The required version of the OneAgent in 1.155.275.20181112-084458 format
 # @param arch
 #   The architecture of your OS - default is all
@@ -46,6 +46,8 @@
 #   Refer to the Customize OneAgent installation documentation on [Technology Support](https://www.dynatrace.com/support/help/technology-support/operating-systems/)
 # @param reboot_system
 #   If set to true, puppet will reboot the server after installing the OneAgent - default is false
+# @param manage_service
+#   Whether to manage the service - default is true
 # @param service_state
 #   What state the dynatrace oneagent service should be in - default is running
 #   Allowed values: running, stopped
@@ -55,12 +57,12 @@
 #   What state the dynatrace oneagent package should be in - default is present
 #   Allowed values: present, absent
 # @param host_tags
-#   Values to automatically add tags to a host, 
-#   should contain an array of strings or key/value pairs. 
+#   Values to automatically add tags to a host,
+#   should contain an array of strings or key/value pairs.
 #   For example: ['Environment=Prod', 'Organization=D1P', 'Owner=john.doe@dynatrace.com', 'Support=https://www.dynatrace.com/support/linux']
 # @param host_metadata
-#   Values to automatically add metadata to a host, 
-#   Should contain an array of strings or key/value pairs. 
+#   Values to automatically add metadata to a host,
+#   Should contain an array of strings or key/value pairs.
 #   For example: ['LinuxHost', 'Gdansk', 'role=fallback', 'app=easyTravel']
 # @param hostname
 #   Overrides an automatically detected host name. Example: My App Server
@@ -74,7 +76,7 @@
 # @param host_group
 #   Change host group assignment
 # @param infra_only
-#   Enable or disable Infrastructure Monitoring mode 
+#   Enable or disable Infrastructure Monitoring mode
 # @param network_zone
 #   Set the network zone for the host
 # @param oneagent_puppet_conf_dir
@@ -126,6 +128,7 @@ class dynatraceoneagent (
   String $default_install_dir            = $dynatraceoneagent::params::default_install_dir,
   Hash $oneagent_params_hash             = $dynatraceoneagent::params::oneagent_params_hash,
   Boolean $reboot_system                 = $dynatraceoneagent::params::reboot_system,
+  Boolean $manage_service                = $dynatraceoneagent::params::manage_service,
   String $service_state                  = $dynatraceoneagent::params::service_state,
   String $package_state                  = $dynatraceoneagent::params::package_state,
 
@@ -153,39 +156,39 @@ class dynatraceoneagent (
 
 ) inherits dynatraceoneagent::params {
 
-    if $::kernel == 'Linux' {
-      $os_type = 'unix'
-    } elsif $::osfamily  == 'AIX' {
-      $os_type = 'aix'
-    }
+  if $::kernel == 'Linux' {
+    $os_type = 'unix'
+  } elsif $::osfamily  == 'AIX' {
+    $os_type = 'aix'
+  }
 
-    if $oneagent_params_hash['INSTALL_PATH']{
-      $install_dir = $oneagent_params_hash['INSTALL_PATH']
-    } else {
-      $install_dir = $default_install_dir
-    }
+  if $oneagent_params_hash['INSTALL_PATH']{
+    $install_dir = $oneagent_params_hash['INSTALL_PATH']
+  } else {
+    $install_dir = $default_install_dir
+  }
 
-    if $version == 'latest' {
-      $download_link  = "${tenant_url}${api_path}${os_type}/${installer_type}/latest/?Api-Token=${paas_token}&arch=${arch}"
-    } else {
-      $download_link  = "${tenant_url}${api_path}${os_type}/${installer_type}/version/${version}?Api-Token=${paas_token}&arch=${arch}"
-    }
+  if $version == 'latest' {
+    $download_link  = "${tenant_url}${api_path}${os_type}/${installer_type}/latest/?Api-Token=${paas_token}&arch=${arch}"
+  } else {
+    $download_link  = "${tenant_url}${api_path}${os_type}/${installer_type}/version/${version}?Api-Token=${paas_token}&arch=${arch}"
+  }
 
-    if $::osfamily == 'Windows' {
-      $filename                = "Dynatrace-OneAgent-${::osfamily}-${version}.exe"
-      $download_path           = "${download_dir}\\${filename}"
-      $created_dir             = "${install_dir}\\agent\\agent.state"
-      $oneagent_tools_dir      = "${install_dir}\\agent\\tools"
-    } elsif ($::kernel == 'Linux') or ($::osfamily  == 'AIX') {
-      $filename                 = "Dynatrace-OneAgent-${::kernel}-${version}.sh"
-      $download_path            = "${download_dir}/${filename}"
-      $dt_root_cert             = "${download_dir}/${cert_file_name}"
-      $oneagent_params_array    = $oneagent_params_hash.map |$key,$value| { "${key}=${value}" }
-      $oneagent_unix_params     = join($oneagent_params_array, ' ' )
-      $command                  = "/bin/sh ${download_path} ${oneagent_unix_params}"
-      $created_dir              = "${install_dir}/agent/agent.state"
-      $oneagent_tools_dir       = "${$install_dir}/agent/tools"
-    }
+  if $::osfamily == 'Windows' {
+    $filename                = "Dynatrace-OneAgent-${::osfamily}-${version}.exe"
+    $download_path           = "${download_dir}\\${filename}"
+    $created_dir             = "${install_dir}\\agent\\agent.state"
+    $oneagent_tools_dir      = "${install_dir}\\agent\\tools"
+  } elsif ($::kernel == 'Linux') or ($::osfamily  == 'AIX') {
+    $filename                 = "Dynatrace-OneAgent-${::kernel}-${version}.sh"
+    $download_path            = "${download_dir}/${filename}"
+    $dt_root_cert             = "${download_dir}/${cert_file_name}"
+    $oneagent_params_array    = $oneagent_params_hash.map |$key,$value| { "${key}=${value}" }
+    $oneagent_unix_params     = join($oneagent_params_array, ' ' )
+    $command                  = "/bin/sh ${download_path} ${oneagent_unix_params}"
+    $created_dir              = "${install_dir}/agent/agent.state"
+    $oneagent_tools_dir       = "${$install_dir}/agent/tools"
+  }
 
   if $package_state != 'absent' {
     contain dynatraceoneagent::download
