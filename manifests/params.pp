@@ -18,6 +18,7 @@ class dynatraceoneagent::params {
     $download_options   = undef
     $download_cert_link = 'https://ca.dynatrace.com/dt-root.cert.pem'
     $cert_file_name     = 'dt-root.cert.pem'
+    $ca_cert_src_path   = "modules/${module_name}/${cert_file_name}"
 
     # OneAgent Install Parameters
     $oneagent_params_hash = {
@@ -26,6 +27,7 @@ class dynatraceoneagent::params {
     }
     $reboot_system      = false
     $service_state      = 'running'
+    $manage_service     = true
     $package_state      = 'present'
 
     # OneAgent Host Configuration Parameters
