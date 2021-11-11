@@ -32,6 +32,8 @@
 #   Link for downloading dynatrace root cert pem file
 # @param cert_file_name
 #   Name of the downloaded cert file
+# @param ca_cert_src_path
+#   Location of dynatrace root cert file in module
 # @param allow_insecure
 #   Ignore HTTPS certificate errors when using the archive module.
 # @param download_options
@@ -49,6 +51,8 @@
 # @param service_state
 #   What state the dynatrace oneagent service should be in - default is running
 #   Allowed values: running, stopped
+# @param manage_service
+#   Whether puppet should manage the state of the OneAgent service - default is true
 # @param service_name
 #   The name of the dynatrace OneAgent based on the OS
 # @param package_state
@@ -116,6 +120,7 @@ class dynatraceoneagent (
   Optional[String] $proxy_server        = $dynatraceoneagent::params::proxy_server,
   Optional[String] $download_cert_link  = $dynatraceoneagent::params::download_cert_link,
   Optional[String] $cert_file_name      = $dynatraceoneagent::params::cert_file_name,
+  Optional[String] $ca_cert_src_path    = $dynatraceoneagent::params::ca_cert_src_path,
   Optional[Boolean] $allow_insecure     = $dynatraceoneagent::params::allow_insecure,
   Optional $download_options            = $dynatraceoneagent::params::download_options,
 
@@ -127,6 +132,7 @@ class dynatraceoneagent (
   Hash $oneagent_params_hash             = $dynatraceoneagent::params::oneagent_params_hash,
   Boolean $reboot_system                 = $dynatraceoneagent::params::reboot_system,
   String $service_state                  = $dynatraceoneagent::params::service_state,
+  Boolean $manage_service                = $dynatraceoneagent::params::manage_service,
   String $package_state                  = $dynatraceoneagent::params::package_state,
 
 # OneAgent Host Configuration Parameters

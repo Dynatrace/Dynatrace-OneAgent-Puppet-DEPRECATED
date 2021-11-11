@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.9.0
+
+### Features
+
+ - Provide option to disable puppet from managing the OneAgent service using the `manage_service` parameter
+ - Dynatrace root cert file is now directly passed with module instead of requiring archive for download
+
+### Bugfixes
+
+TBD
+
+### Known Issues
+
+TBD
+
 ## Release 1.8.0
 
 ### Features

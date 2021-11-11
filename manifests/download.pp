@@ -19,6 +19,7 @@ class dynatraceoneagent::download {
   $download_link            = $dynatraceoneagent::download_link
   $download_cert_link       = $dynatraceoneagent::download_cert_link
   $cert_file_name           = $dynatraceoneagent::cert_file_name
+  $ca_cert_src_path         = $dynatraceoneagent::ca_cert_src_path
   $provider                 = $dynatraceoneagent::provider
   $oneagent_params_hash     = $dynatraceoneagent::oneagent_params_hash
   $reboot_system            = $dynatraceoneagent::reboot_system
@@ -34,36 +35,26 @@ class dynatraceoneagent::download {
     }
 
     archive{ $filename:
-      ensure         => present,
-      extract        => false,
-      source         => $download_link,
-      path           => $download_path,
-      allow_insecure => $allow_insecure,
-      require        => File[$download_dir],
-      creates        => $created_dir,
-      proxy_server   => $proxy_server,
-      cleanup        => false,
+      ensure           => present,
+      extract          => false,
+      source           => $download_link,
+      path             => $download_path,
+      allow_insecure   => $allow_insecure,
+      require          => File[$download_dir],
+      creates          => $created_dir,
+      proxy_server     => $proxy_server,
+      cleanup          => false,
+      download_options => $download_options,
     }
   }
 
   if ($::kernel == 'Linux' or $::osfamily  == 'AIX') and ($dynatraceoneagent::verify_signature) and ($package_state != 'absent'){
 
-    archive{ $dynatraceoneagent::cert_file_name:
-      ensure           => present,
-      extract          => false,
-      source           => $download_cert_link,
-      path             => $dynatraceoneagent::dt_root_cert,
-      allow_insecure   => $allow_insecure,
-      require          => File[$download_dir],
-      creates          => $dynatraceoneagent::cert_file_name,
-      proxy_server     => $proxy_server,
-      cleanup          => false,
-      download_options => $download_options,
-    }
-
-    file{ $dynatraceoneagent::dt_root_cert:
-      ensure => file,
-      mode   => $global_mode,
+    file { $dynatraceoneagent::dt_root_cert:
+      ensure  => present,
+      mode    => $global_mode,
+      source  => "puppet:///${ca_cert_src_path}",
+      require => File[$download_dir]
     }
 
     $verify_signature_command = "( echo 'Content-Type: multipart/signed; protocol=\"application/x-pkcs7-signature\"; micalg=\"sha-256\";\
@@ -71,7 +62,7 @@ class dynatraceoneagent::download {
      cat ${download_path} ) | openssl cms -verify -CAfile ${dynatraceoneagent::dt_root_cert} > /dev/null"
 
     exec { 'delete_oneagent_installer_script':
-        command   => "rm ${$download_path}",
+        command   => "rm ${$download_path} ${dynatraceoneagent::dt_root_cert}",
         cwd       => $download_dir,
         timeout   => 6000,
         provider  => $provider,
