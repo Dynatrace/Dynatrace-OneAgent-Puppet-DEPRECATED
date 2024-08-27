@@ -1,3 +1,5 @@
+> ⚠️ **Warning**: This repository has been deprecated.
+
 # Dynatrace OneAgent module for puppet
 
 ## Table of Contents
